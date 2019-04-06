@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Core\ControllerRelationshipStubHandler;
 use App\Core\TableSchema;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Collection;
@@ -86,6 +87,10 @@ class GenerateCrudModel extends ModelMakeCommand
             ['password', 'email_verified_at', 'remember_token']
         );
 
+        $foreignColumns = $columns->filter(function ($value, $key) {
+            return $value->table != null;
+        });
+
         return array_merge($replace, [
             'DummyFillableFields' => $this->buildInputs((new TableSchema(
                 $table->name, $fillableFields
@@ -93,6 +98,9 @@ class GenerateCrudModel extends ModelMakeCommand
             'DummyHiddenFields' => $this->buildInputs((new TableSchema(
                 $table->name, $hiddenFields
             ))->getColumns()),
+            'DummyRelationship' => $this->buildRelationship((new TableSchema(
+                $table->name, $foreignColumns
+            ))->getColumns())
         ]);
     }
 
@@ -111,6 +119,17 @@ class GenerateCrudModel extends ModelMakeCommand
             }
 
             $html .= "'".$column->name."', ";
+        });
+
+        return $html;
+    }
+
+    protected function buildRelationship(Collection $columns)
+    {
+        $html = '';
+
+        $columns->each(function ($column) use(&$html) {
+            $html .= (new ControllerRelationshipStubHandler($column))->getInput();
         });
 
         return $html;

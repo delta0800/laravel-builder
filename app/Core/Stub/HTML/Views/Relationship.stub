@@ -1,0 +1,7 @@
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+    */
+    public function DUMMYFOREIGNMODELVARIABLE()
+    {
+        return $this->belongsTo(DUMMYFOREIGNMODELCLASS::class, 'DUMMYFOREIGNKEY');
+    }

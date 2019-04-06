@@ -28,4 +28,6 @@ class DummyClass extends Model
     protected $hidden = [
         DummyHiddenFields
     ];
+
+    DummyRelationship
 }

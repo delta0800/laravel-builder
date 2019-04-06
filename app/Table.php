@@ -20,6 +20,9 @@ class Table extends Model
         return $this->hasMany(TableField::class, 'table_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function project()
     {
         return $this->belongsTo(Project::class, 'project_id');
