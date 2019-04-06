@@ -1,0 +1,1 @@
+$data['DUMMYFIELDNAME'] = request()->has('DUMMYFIELDNAME');

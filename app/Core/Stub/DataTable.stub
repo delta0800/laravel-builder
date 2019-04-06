@@ -1,0 +1,44 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+use App\Core\Datatables\BaseDatatableScope;
+
+class DummyClass extends BaseDatatableScope
+{
+    /**
+     * DummyClass constructor.
+     */
+    public function __construct()
+    {
+        $this->setHtml(DummyFields);
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function query()
+    {
+        $query = DummyModelClass::query();
+
+        return datatables()->eloquent($query)
+            ->addColumn('actions', function (DummyModelClass $DummyModelClassVariable) {
+                $data = [];
+                if(Gate::allows('show', $DummyModelClassVariable)) {
+                    $data['showUrl'] = route('DummyRouteName.show', $DummyModelClassVariable);
+                }
+
+                if(Gate::allows('update', $DummyModelClassVariable)) {
+                    $data['editUrl'] = route('DummyRouteName.edit', $DummyModelClassVariable);
+                }
+
+                if(Gate::allows('delete', $DummyModelClassVariable)) {
+                    $data['deleteUrl'] = route('DummyRouteName.destroy', $DummyModelClassVariable);
+                }
+                return view('DummyActionView', $data);
+            })
+            ->rawColumns(['actions'])
+            ->make(true);
+    }
+}

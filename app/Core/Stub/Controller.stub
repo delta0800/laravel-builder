@@ -1,0 +1,123 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyFullModelClass;
+use DummyFullDataTableClass;
+use App\Http\Requests\DummyRequestName;
+use Gate;
+
+class DummyClass extends Controller
+{
+    public function __construct()
+    {
+        $this->authorizeResource(DummyModelClass::class);
+    }
+
+    /**
+     * Display a listing of the resource.
+
+     * @param DummyDataTableClass $dataTable
+     * @return \Illuminate\Http\Response
+     */
+    public function index(DummyDataTableClass $dataTable)
+    {
+        if (request()->ajax()) {
+
+            return $dataTable->query();
+        }
+
+        return view('DummyIndexView', [
+            'html' => $dataTable->html()
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        DummyForeignTables
+        return view('DummyCreateView', compact(DummyForeignVariable));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  DummyRequestName  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(DummyRequestName $request)
+    {
+        $data = $request->all();
+
+        DummyHasFields
+        DummyModelClass::create($data);
+
+        if(request()->wantsJson()) {
+            return response([], 200);
+        }
+
+        return redirect('/DummyRouteName');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  DummyModelClass $DummyModelClassVariable
+     * @return \Illuminate\Http\Response
+     */
+    public function show(DummyModelClass $DummyModelClassVariable)
+    {
+        return view('DummyShowView', compact('DummyModelClassVariable'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  DummyModelClass  $DummyModelClassVariable
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(DummyModelClass $DummyModelClassVariable)
+    {
+        DummyForeignTables
+        return view('DummyUpdateView', compact('DummyModelClassVariable', DummyForeignVariable));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  DummyRequestName  $request
+     * @param  DummyModelClass  $DummyModelClassVariable
+     * @return \Illuminate\Http\Response
+     */
+    public function update(DummyRequestName $request, DummyModelClass $DummyModelClassVariable)
+    {
+        $data = $request->all();
+
+        DummyHasFields
+        $DummyModelClassVariable->fill($data)->save();
+
+        if(request()->wantsJson()) {
+            return response([], 200);
+        }
+
+        return redirect('/DummyRouteName');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param DummyModelClass $DummyModelClassVariable
+     * @return \Illuminate\Http\Response
+     * @throws \Exception
+     */
+    public function destroy(DummyModelClass $DummyModelClassVariable)
+    {
+        $DummyModelClassVariable->delete();
+
+        return redirect('/DummyRouteName');
+    }
+}
