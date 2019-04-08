@@ -52,8 +52,6 @@ class ModelRelationHasStubHandler
     }
 
     /**
-     * @param string $path
-     *
      * @return string|bool
      */
     protected function getStubPath()

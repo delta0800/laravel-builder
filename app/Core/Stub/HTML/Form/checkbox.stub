@@ -1,8 +1,8 @@
-<div class="form-group row">
+<div class="form-group custom-control custom-checkbox row">
     <div class="col-md-5">
         {{ html()->checkbox('InputName')
                 ->id('InputName')
-                ->class(['form-control', 'is-invalid' => $errors->has('InputName')])
+                ->class(['custom-control-input', 'is-invalid' => $errors->has('InputName')])
         }}
         {{ html()->label('InputName')
             ->for('InputName')
@@ -16,4 +16,3 @@
         @endif
     </div>
 </div>
-

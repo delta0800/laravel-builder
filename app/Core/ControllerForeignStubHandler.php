@@ -55,6 +55,17 @@ class ControllerForeignStubHandler
         ];
     }
 
+    public function getModelNameSpace()
+    {
+        if(!$this->columnSchema->table) {
+            return null;
+        }
+
+        $modelClass = 'use App\\'.str_replace('_', '',Str::title(str_singular($this->columnSchema->table))).";\n";
+
+        return $modelClass;
+    }
+
     /**
      * @param string $path
      *

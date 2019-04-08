@@ -1,0 +1,67 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\User;
+DummyModelUse;
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class DummyClass
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can index the DummyModelClass.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function index(User $user)
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can view the epin.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function view(User $user, DummyModelClass $DummyModelClassVariable)
+    {
+       return true;
+    }
+
+    /**
+     * Determine whether the user can create DummyModelClass.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can update the DummyModelClass.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function update(User $user, DummyModelClass $DummyModelClassVariable)
+    {
+        return true;
+    }
+
+    /**
+     * Determine whether the user can delete the DummyModelClass.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function delete(User $user, DummyModelClass $DummyModelClassVariable)
+    {
+        return true;
+    }
+}

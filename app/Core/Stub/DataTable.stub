@@ -22,7 +22,7 @@ class DummyClass extends BaseDatatableScope
     {
         $query = DummyModelClass::query();
 
-        return datatables()->eloquent($query)
+        return datatables()->of($query)
             ->addColumn('actions', function (DummyModelClass $DummyModelClassVariable) {
                 $data = [];
                 if(Gate::allows('show', $DummyModelClassVariable)) {

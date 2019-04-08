@@ -136,11 +136,11 @@ class GenerateCrudController extends GeneratorCommand
     {
         $pluralVar = strtolower(str_plural(class_basename($this->modelClass)));
 
-        $listView = "{$pluralVar}.list";
+        $listView = "{$pluralVar}.index";
         $actionView = "{$pluralVar}.dtAction";
         $createView = "{$pluralVar}.create";
         $showView = "{$pluralVar}.show";
-        $updateView = "{$pluralVar}.update";
+        $updateView = "{$pluralVar}.edit";
 
         return array_merge($replace, [
             'DummyIndexView' => $listView,
@@ -174,6 +174,10 @@ class GenerateCrudController extends GeneratorCommand
                 $table->name, $filtered
             ))->getColumns()),
 
+            'DummyForeignModelNamespace' => $this->buildForeignModelNamespace((new TableSchema(
+                $table->name, $columns
+            ))->getColumns()),
+
             'DummyForeignTables' => $this->buildForeign((new TableSchema(
                 $table->name, $columns
             ))->getColumns()),
@@ -195,6 +199,17 @@ class GenerateCrudController extends GeneratorCommand
 
         $columns->each(function ($column) use(&$html) {
             $html .= (new ControllerFieldStubHandler($column))->getInput();
+        });
+
+        return $html;
+    }
+
+    public function buildForeignModelNamespace(Collection $columns)
+    {
+        $html = '';
+
+        $columns->each(function ($column) use(&$html) {
+            $html .= (new ControllerForeignStubHandler($column))->getModelNameSpace();
         });
 
         return $html;

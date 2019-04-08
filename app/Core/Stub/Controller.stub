@@ -6,12 +6,13 @@ use DummyFullModelClass;
 use DummyFullDataTableClass;
 use App\Http\Requests\DummyRequestName;
 use Gate;
+DummyForeignModelNamespace
 
 class DummyClass extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(DummyModelClass::class);
+        // $this->authorizeResource(DummyModelClass::class);
     }
 
     /**

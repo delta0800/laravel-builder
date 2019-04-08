@@ -105,7 +105,7 @@ class GenerateCrud extends Command
             '--table' => $table,
         ]);
 
-        $this->call('make:policy', [
+        $this->call('crud:policy', [
             'name' => $model.'Policy',
             '--model' => $model
         ]);

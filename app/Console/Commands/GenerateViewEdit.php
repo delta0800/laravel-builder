@@ -67,7 +67,8 @@ class GenerateViewEdit extends GeneratorCommand
             'DummySubTitle' => str_plural(class_basename($this->modelClass)),
             'DummyPageTitle' => 'Edit ' . (class_basename($this->modelClass)),
             'DummyModelObject' => strtolower(class_basename($this->modelClass)),
-            'DummyEditRoute' => "route('".strtolower(str_plural(class_basename($this->modelClass))).".update')",
+            'DummyEditRoute' => "route('".strtolower(str_plural(class_basename($this->modelClass))).".update', $"
+                .strtolower(class_basename($this->modelClass)).")",
             'DummyDirectoryName' => strtolower(str_plural(class_basename($this->modelClass))),
             'DummyAcceptsFiles' => $acceptFile ? "->acceptsFiles()" : ''
         ];
