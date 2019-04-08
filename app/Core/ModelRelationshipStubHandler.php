@@ -4,7 +4,7 @@ namespace App\Core;
 
 use Illuminate\Support\Str;
 
-class ControllerRelationshipStubHandler
+class ModelRelationshipStubHandler
 {
     /**
      * Column Name

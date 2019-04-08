@@ -1,0 +1,7 @@
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\hasMany
+    */
+    public function DUMMYFOREIGNMODELVARIABLE()
+    {
+        return $this->hasMany(DUMMYFOREIGNMODELCLASS::class, 'DUMMYFOREIGNKEY');
+    }

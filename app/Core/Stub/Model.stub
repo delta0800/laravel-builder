@@ -30,4 +30,6 @@ class DummyClass extends Model
     ];
 
     DummyRelationship
+
+    DummyRelationHasMany
 }

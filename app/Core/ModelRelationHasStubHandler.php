@@ -4,7 +4,7 @@ namespace App\Core;
 
 use Illuminate\Support\Str;
 
-class ControllerForeignStubHandler
+class ModelRelationHasStubHandler
 {
     /**
      * Column Name
@@ -18,11 +18,11 @@ class ControllerForeignStubHandler
      *
      * InputStubHandler constructor.
      *
-     * @param \App\Core\ColumnSchema $columnSchema
+     * @param $table
      */
-    public function __construct(ColumnSchema $columnSchema)
+    public function __construct(Array $table)
     {
-        $this->columnSchema = $columnSchema;
+        $this->columnSchema = $table;
     }
 
     /**
@@ -30,14 +30,10 @@ class ControllerForeignStubHandler
      */
     public function getInput()
     {
-        if(!$this->columnSchema->table) {
-            return null;
-        }
-
-        return str_replace(
+        return (str_replace(
             array_keys($this->getReplaceElements()), array_values($this->getReplaceElements()),
             $this->getStubPath()
-        );
+        ));
     }
 
     /**
@@ -45,13 +41,13 @@ class ControllerForeignStubHandler
      */
     public function getReplaceElements()
     {
-        $modelClass = 'App\\'.str_replace('_', '',Str::title(str_singular($this->columnSchema->table)));
+        $model = str_replace('_', '',Str::title(str_singular(array_get($this->columnSchema, 'foreign_table'))));
+        $modelClass = 'App\\'.$model;
 
         return [
             'DUMMYFOREIGNMODELCLASS' => class_basename($modelClass),
-            'DUMMYDISPLAYFIELD' => $this->columnSchema->display_field,
-            'DUMMYFOREIGNKEY' => $this->columnSchema->foreign_key,
-            'DUMMYFOREIGNMODELVARIABLE' => $this->columnSchema->table,
+            'DUMMYFOREIGNKEY' => array_get($this->columnSchema, 'foreign_columns'),
+            'DUMMYFOREIGNMODELVARIABLE' => str_replace('_', '',array_get($this->columnSchema, 'foreign_table')),
         ];
     }
 
@@ -62,6 +58,6 @@ class ControllerForeignStubHandler
      */
     protected function getStubPath()
     {
-        return file_get_contents(app_path("Core/Stub/HTML/Views/foreign.stub"));
+        return file_get_contents(app_path("Core/Stub/HTML/Views/RelationshipHas.stub"));
     }
 }

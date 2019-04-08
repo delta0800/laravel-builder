@@ -2,7 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Core\ControllerRelationshipStubHandler;
+use App\Core\ModelRelationHasStubHandler;
+use App\Core\ModelRelationshipStubHandler;
 use App\Core\TableSchema;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Collection;
@@ -47,9 +48,9 @@ class GenerateCrudModel extends ModelMakeCommand
         $replace = $this->buildTableReplacements($replace);
         $replace = $this->buildFieldsReplacement($replace);
 
-        return str_replace(
+        return (str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
-        );
+        ));
     }
 
     /**
@@ -87,11 +88,11 @@ class GenerateCrudModel extends ModelMakeCommand
             ['password', 'email_verified_at', 'remember_token']
         );
 
-        $foreignColumns = $columns->filter(function ($value, $key) {
+        $foreignColumns = $columns->filter(function ($value) {
             return $value->table != null;
         });
 
-        return array_merge($replace, [
+        return (array_merge($replace, [
             'DummyFillableFields' => $this->buildInputs((new TableSchema(
                 $table->name, $fillableFields
             ))->getColumns()),
@@ -100,8 +101,11 @@ class GenerateCrudModel extends ModelMakeCommand
             ))->getColumns()),
             'DummyRelationship' => $this->buildRelationship((new TableSchema(
                 $table->name, $foreignColumns
-            ))->getColumns())
-        ]);
+            ))->getColumns()),
+            'DummyRelationHasMany' => $this->buildRelationshipHasMany((new TableSchema(
+                $table->name, $columns
+            ))),
+        ]));
     }
 
     /**
@@ -113,13 +117,15 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $html = '';
 
-        $columns->each(function ($column) use(&$html) {
-            if($column->isPrimaryKey) {
-                return null;
-            }
+        if ($columns) {
+            $columns->each(function ($column) use(&$html) {
+                if($column->isPrimaryKey) {
+                    return null;
+                }
 
-            $html .= "'".$column->name."', ";
-        });
+                $html .= "'".$column->name."', ";
+            });
+        }
 
         return $html;
     }
@@ -128,11 +134,26 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $html = '';
 
-        $columns->each(function ($column) use(&$html) {
-            $html .= (new ControllerRelationshipStubHandler($column))->getInput();
-        });
+        if ($columns) {
+            $columns->each(function ($column) use (&$html) {
+                $html .= (new ModelRelationshipStubHandler($column))->getInput();
+            });
+        }
 
         return $html;
+    }
+
+    protected function buildRelationshipHasMany($table)
+    {
+        $html = [];
+
+        if ($table) {
+            $html = ($table->primaryTables ? array_map(function ($table) {
+                return (new ModelRelationHasStubHandler($table))->getInput();
+            }, $table->primaryTables) : []);
+        }
+
+        return (implode($html));
     }
 
     /**

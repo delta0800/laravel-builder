@@ -158,6 +158,17 @@ class ColumnSchema
     }
 
     /**
+     * Set ForeignKey for the column
+     *
+     * @param $foreignKey
+     */
+    public function setPrimaryTable($primaryKey)
+    {
+        $this->foreign_key = $primaryKey->foreign_key;
+        $this->isPrimaryKey = true;
+    }
+
+    /**
      * Get attributes in array
      *
      * @return array

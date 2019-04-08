@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Table;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +36,13 @@ class TableSchema
      * @var array|null
      */
     protected $primaryKeys = null;
+
+    /**
+     * List of columns
+     *
+     * @var array|null
+     */
+    protected $primaryTables = [];
 
     /**
      * @var array
@@ -109,6 +117,8 @@ class TableSchema
         $this->foreignKeysInColumns();
 
         $this->primaryKeysInColumns();
+
+        $this->primaryKeyTables();
     }
 
     /**
@@ -137,6 +147,39 @@ class TableSchema
                 });
             }
         }
+    }
+
+    /**
+     * Set primaryKeys In related Columns.
+     */
+    protected function primaryKeyTables()
+    {
+        $tables = Table::whereHas('tableFields', function ($query) {
+            $query->where('table', $this->name);
+        })->get();
+
+        if($tables) {
+            foreach ($tables as $table) {
+                $this->primaryTables[] = $this->primaryKeyToArray($table);
+            }
+        }
+    }
+
+    /**
+     * @param $table
+     * @return array
+     */
+    protected function primaryKeyToArray($table)
+    {
+        $columns = collect($table->tableFields);
+
+        $foreignColumn = $columns->firstWhere('table', $this->name);
+
+        return [
+            'local_table' => $this->name,
+            'foreign_table' => $table->name,
+            'foreign_columns' => array_get($foreignColumn, 'name')
+        ];
     }
 
     /**

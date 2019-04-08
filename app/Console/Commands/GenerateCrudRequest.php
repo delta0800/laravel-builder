@@ -95,6 +95,9 @@ class GenerateCrudRequest extends GeneratorCommand
      */
     protected function buildInputs(Collection $columns)
     {
+        if (! $columns) {
+            return null;
+        }
         $html = '';
 
         $columns->each(function ($column) use(&$html) {

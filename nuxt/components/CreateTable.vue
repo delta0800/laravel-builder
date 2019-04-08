@@ -196,7 +196,7 @@ export default {
       this.form.fields.push({
         name: '',
         type: 'string',
-        length: '',
+        length: '255',
         unsigned: false,
         allow_null: false,
         key: '',

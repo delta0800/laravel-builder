@@ -126,7 +126,7 @@ class GenerateCrudDataTable extends GeneratorCommand
     {
         $table = $this->option('table');
 
-        $columns = collect($table->tableFields)->filter(function ($column, $key) {
+        $columns = collect($table->tableFields)->filter(function ($column) {
             return $column->show_on == true;
         });
 
@@ -158,6 +158,10 @@ class GenerateCrudDataTable extends GeneratorCommand
      */
     protected function buildInputs(Collection $columns)
     {
+        if (!$columns) {
+            return null;
+        }
+
         $htmlStr = '[
         ';
         $columns->each(function ($column) use(&$htmlStr) {
