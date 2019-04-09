@@ -4,6 +4,7 @@ namespace DummyNamespace;
 
 use DummyFullModelClass;
 use App\Core\Datatables\BaseDatatableScope;
+use Gate;
 
 class DummyClass extends BaseDatatableScope
 {
@@ -25,17 +26,17 @@ class DummyClass extends BaseDatatableScope
         return datatables()->of($query)
             ->addColumn('actions', function (DummyModelClass $DummyModelClassVariable) {
                 $data = [];
-                if(Gate::allows('show', $DummyModelClassVariable)) {
+                //if(Gate::allows('show', $DummyModelClassVariable)) {
                     $data['showUrl'] = route('DummyRouteName.show', $DummyModelClassVariable);
-                }
+                //}
 
-                if(Gate::allows('update', $DummyModelClassVariable)) {
+                //if(Gate::allows('update', $DummyModelClassVariable)) {
                     $data['editUrl'] = route('DummyRouteName.edit', $DummyModelClassVariable);
-                }
+                //}
 
-                if(Gate::allows('delete', $DummyModelClassVariable)) {
+                //if(Gate::allows('delete', $DummyModelClassVariable)) {
                     $data['deleteUrl'] = route('DummyRouteName.destroy', $DummyModelClassVariable);
-                }
+                //}
                 return view('DummyActionView', $data);
             })
             ->rawColumns(['actions'])

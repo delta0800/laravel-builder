@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Core\ModelRelationHasStubHandler;
-use App\Core\ModelRelationshipStubHandler;
+use App\Core\ModelRelationBelongStubHandler;
 use App\Core\TableSchema;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Collection;
@@ -136,7 +136,7 @@ class GenerateCrudModel extends ModelMakeCommand
 
         if ($columns) {
             $columns->each(function ($column) use (&$html) {
-                $html .= (new ModelRelationshipStubHandler($column))->getInput();
+                $html .= (new ModelRelationBelongStubHandler($column))->getInput();
             });
         }
 

@@ -21,7 +21,7 @@
         "spatie/laravel-html": "^2.21",
         "spatie/laravel-medialibrary": "^7.0.0",
         "spatie/laravel-sluggable": "^2.1",
-        "yajra/laravel-datatables": "^1.0"
+        "yajra/laravel-datatables-html": "^4.4"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

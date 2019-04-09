@@ -1,0 +1,10 @@
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4">
+                            <h6>Placeholder</h6>
+                        </div>
+                        <div class="col-8">
+                            <span class="text-muted">{{ $ModelVariable->InputName }}</span>
+                        </div>
+                    </div>
+                </div>

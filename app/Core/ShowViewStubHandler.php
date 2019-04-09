@@ -2,9 +2,7 @@
 
 namespace App\Core;
 
-use Illuminate\Support\Str;
-
-class ModelRelationshipStubHandler
+class ShowViewStubHandler
 {
     /**
      * Column Name
@@ -13,16 +11,20 @@ class ModelRelationshipStubHandler
      */
     public $columnSchema;
 
+    public $model;
+
     /**
      * Column constructor
      *
      * InputStubHandler constructor.
      *
      * @param \App\Core\ColumnSchema $columnSchema
+     * @param $model
      */
-    public function __construct(ColumnSchema $columnSchema)
+    public function __construct(ColumnSchema $columnSchema, $model)
     {
         $this->columnSchema = $columnSchema;
+        $this->model = $model;
     }
 
     /**
@@ -36,7 +38,7 @@ class ModelRelationshipStubHandler
 
         return str_replace(
             array_keys($this->getReplaceElements()), array_values($this->getReplaceElements()),
-            $this->getStubPath()
+            $this->getStubHtml()
         );
     }
 
@@ -45,13 +47,10 @@ class ModelRelationshipStubHandler
      */
     public function getReplaceElements()
     {
-        $model = str_replace('_', '',Str::title(str_singular($this->columnSchema->table)));
-        $modelClass = 'App\\'.$model;
-
         return [
-            'DUMMYFOREIGNMODELCLASS' => class_basename($modelClass),
-            'DUMMYFOREIGNKEY' => $this->columnSchema->name,
-            'DUMMYFOREIGNMODELVARIABLE' => strtolower($model),
+            'InputName' => $this->columnSchema->name,
+            'Placeholder' => ucwords(str_replace('_', ' ', $this->columnSchema->name)),
+            'ModelVariable' => strtolower(class_basename($this->model)),
         ];
     }
 
@@ -60,8 +59,8 @@ class ModelRelationshipStubHandler
      *
      * @return string|bool
      */
-    protected function getStubPath()
+    protected function getStubHtml()
     {
-        return file_get_contents(app_path("Core/Stub/HTML/Views/Relationship.stub"));
+        return file_get_contents(app_path("Core/Stub/HTML/Show/_showView.stub"));
     }
 }

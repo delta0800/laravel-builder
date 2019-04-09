@@ -15,4 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/login', 'Api/auth/LoginController@me')->name('login');
+
 Route::get('/Api/generate/crud', 'Api\TableController@generator');
+
+Route::resource('/epins', 'EpinController');
+
+

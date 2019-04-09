@@ -1,0 +1,18 @@
+@extends('layouts.app', [
+    'subTitle' => 'DummySubTitle',
+    'pageTitle' => 'DummyPageTitle'
+])
+
+@section('content')
+    <div class="row">
+        <div class="col-lg-9 col-md-12">
+            <div class="card card-small mb-3">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap">
+                        DummyShowData
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

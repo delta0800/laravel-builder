@@ -7,33 +7,28 @@ use App\User;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class GenerateViewIndex extends GeneratorCommand
+class GenerateViewActionButton extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'view:index';
+    protected $name = 'view:action';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new index view';
+    protected $description = 'Create a new action button view';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'View';
-
-    /**
-     * @var string
-     */
-    private $modelClass;
+    protected $type = 'Button View';
 
     /**
      * Get the stub file for the generator.
@@ -42,7 +37,7 @@ class GenerateViewIndex extends GeneratorCommand
      */
     protected function getStub()
     {
-        return app_path('Core/Stub/HTML/Views/index.stub');
+        return app_path('Core/Stub/HTML/Views/actionButton.stub');
     }
 
     /**
@@ -57,13 +52,7 @@ class GenerateViewIndex extends GeneratorCommand
      */
     protected function buildClass($name)
     {
-        $this->modelClass = $this->option('model') ?: User::class; // temporary
-
-        $replace = [
-            'DummyPageTitle' => str_plural(class_basename($this->modelClass)),
-            'DummyCreateRoute' => "route('".strtolower(str_plural(class_basename($this->modelClass))).".create')",
-            'DummyCreateTitle' => 'Add '.title_case(class_basename($this->modelClass)),
-        ];
+        $replace = [];
 
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
@@ -78,7 +67,7 @@ class GenerateViewIndex extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return resource_path('views/' . $this->argument('name')) . '/index.blade.php';
+        return resource_path('views/' . $this->argument('name')) . '/dtAction.blade.php';
     }
 
     /**
@@ -89,7 +78,6 @@ class GenerateViewIndex extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
         ];
     }

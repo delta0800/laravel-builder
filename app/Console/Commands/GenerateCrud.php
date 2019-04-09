@@ -105,6 +105,18 @@ class GenerateCrud extends Command
             '--table' => $table,
         ]);
 
+        $this->call('view:show', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+        ]);
+
+        $this->call('view:action', [
+            'name' => $table->name,
+            '--force' => $force,
+        ]);
+
         $this->call('crud:policy', [
             'name' => $model.'Policy',
             '--model' => $model
