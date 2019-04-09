@@ -197,8 +197,15 @@ class TableController extends Controller
             Artisan::call('generate:crud', [
                 'table' => $id,
             ]);
-
         }
+
+        $tables = Table::whereIn('id', $tableId)->get();
+
+        Artisan::call('generate:sidebar', [
+            'name' => 'nav',
+            '--tables' => $tables
+        ]);
+
         return response()->json([
             'success' => true,
         ]);
