@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\DB;
 class TableSchema
 {
     /**
+     * @var object
+     */
+    protected $table;
+
+    /**
      * Table Name
      *
      * @var string
@@ -55,12 +60,14 @@ class TableSchema
     /**
      * Table constructor
      *
-     * @param string $tableName
+     * @param $table
      * @param $columns
      */
-    public function __construct($tableName, $columns)
+    public function __construct($table, $columns)
     {
-        $this->name = $tableName;
+        $this->table = $table;
+
+        $this->name = $table->name;
 
         $this->setAttributes($columns);
     }
@@ -103,11 +110,12 @@ class TableSchema
      * Fill Columns data
      *
      * @param string|null $columns
+     * @return null
      */
     protected function fillColumns($columns = null)
     {
         if( ! $columns) {
-            // $this->getDoctrineSchemaManager()->listTableColumns($this->name);
+            return null;
         }
 
         $this->columns = collect($columns)->map(function($column) {
@@ -155,7 +163,8 @@ class TableSchema
     protected function primaryKeyTables()
     {
         $tables = Table::whereHas('tableFields', function ($query) {
-            $query->where('table', $this->name);
+            $query->where('table', $this->name)
+                ->where('project_id', $this->table->project_id);
         })->get();
 
         if($tables) {

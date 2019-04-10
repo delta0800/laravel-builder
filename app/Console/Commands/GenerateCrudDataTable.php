@@ -132,7 +132,7 @@ class GenerateCrudDataTable extends GeneratorCommand
 
         return array_merge($replace, [
             'DummyFields' => $this->buildInputs((new TableSchema(
-                $table->name, $columns
+                $table, $columns
             ))->getColumns())
         ]);
     }

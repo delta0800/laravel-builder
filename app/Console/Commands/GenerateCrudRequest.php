@@ -83,7 +83,7 @@ class GenerateCrudRequest extends GeneratorCommand
 
         return array_merge($replace, [
             'DummyFillableFields' => $this->buildInputs((new TableSchema(
-                $table->name, $validateFields
+                $table, $validateFields
             ))->getColumns())
         ]);
     }
@@ -148,6 +148,7 @@ class GenerateCrudRequest extends GeneratorCommand
     {
         return array_merge(parent::getOptions(), [
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table'],
+            ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
         ]);
     }
 }

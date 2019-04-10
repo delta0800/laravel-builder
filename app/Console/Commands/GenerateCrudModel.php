@@ -94,16 +94,16 @@ class GenerateCrudModel extends ModelMakeCommand
 
         return (array_merge($replace, [
             'DummyFillableFields' => $this->buildInputs((new TableSchema(
-                $table->name, $fillableFields
+                $table, $fillableFields
             ))->getColumns()),
             'DummyHiddenFields' => $this->buildInputs((new TableSchema(
-                $table->name, $hiddenFields
+                $table, $hiddenFields
             ))->getColumns()),
             'DummyRelationship' => $this->buildRelationship((new TableSchema(
-                $table->name, $foreignColumns
+                $table, $foreignColumns
             ))->getColumns()),
             'DummyRelationHasMany' => $this->buildRelationshipHasMany((new TableSchema(
-                $table->name, $columns
+                $table, $columns
             ))),
         ]));
     }
@@ -165,7 +165,7 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         return array_merge(parent::getOptions(), [
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table'],
-            ['project', null, InputOption::VALUE_NONE, 'Project name'],
+            ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
         ]);
     }
 

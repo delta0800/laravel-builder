@@ -99,11 +99,18 @@ class ColumnSchema
     public $table;
 
     /**
-     * Column type
+     * Column display_field
      *
      * @var integer|null
      */
     public $display_field;
+
+    /**
+     * Column project_id
+     *
+     * @var integer|null
+     */
+    public $project_id;
 
     /**
      * Is Column is primary key
@@ -133,6 +140,7 @@ class ColumnSchema
      */
     public function __construct($attribute)
     {
+        $this->project_id = $attribute->project_id;
         $this->name = $attribute->name;
         $this->type = $attribute->type;
         $this->length = $attribute->length;

@@ -68,7 +68,7 @@ class GenerateViewShow extends GeneratorCommand
             'DummySubTitle' => str_plural(class_basename($this->modelClass)),
             'DummyPageTitle' => 'show ' . (class_basename($this->modelClass)),
             'DummyShowData' => $this->buildInputs((new TableSchema(
-                $table->name, $columns
+                $table, $columns
             ))->getColumns())
         ];
 

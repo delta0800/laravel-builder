@@ -73,7 +73,6 @@ class GenerateCrudPolicy extends GeneratorCommand
         $replace = [];
 
         $replace = $this->buildModelReplacements($replace);
-        $replace = $this->buildRouteReplacements($replace);
 
         return str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
@@ -100,21 +99,6 @@ class GenerateCrudPolicy extends GeneratorCommand
         }
 
         return $replace;
-    }
-
-    /**
-     * Build the model replacement values.
-     *
-     * @param  array  $replace
-     * @return array
-     */
-    protected function buildRouteReplacements(array $replace)
-    {
-        $routeName = strtolower(str_plural(class_basename($this->modelClass)));
-
-        return array_merge($replace, [
-            'DummyRouteName' => $routeName,
-        ]);
     }
 
     /**

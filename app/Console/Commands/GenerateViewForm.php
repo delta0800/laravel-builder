@@ -78,7 +78,7 @@ class GenerateViewForm extends GeneratorCommand
         if($this->argument('name')) {
             return array_merge($replace, [
                 'DummyInputs' => $this->buildInputs((new TableSchema(
-                    $table->name, $columns))->getColumns()
+                    $table, $columns))->getColumns()
                 )
             ]);
         }

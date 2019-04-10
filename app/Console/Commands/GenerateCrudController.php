@@ -165,25 +165,25 @@ class GenerateCrudController extends GeneratorCommand
 
         $filtered = $columns->whereIn('inputType', ['checkbox', 'file', 'password']);
 
-        $foreignColumns = $columns->filter(function ($value, $key) {
-            return $value->table != null;
+        $foreignColumns = $columns->filter(function ($column) {
+            return $column->table != null;
         });
 
         return array_merge($replace, [
             'DummyHasFields' => $this->buildInputs((new TableSchema(
-                $table->name, $filtered
+                $table, $filtered
             ))->getColumns()),
 
             'DummyForeignModelNamespace' => $this->buildForeignModelNamespace((new TableSchema(
-                $table->name, $columns
+                $table, $columns
             ))->getColumns()),
 
             'DummyForeignTables' => $this->buildForeign((new TableSchema(
-                $table->name, $columns
+                $table, $columns
             ))->getColumns()),
 
             'DummyForeignVariable' => $this->buildForeignVariable((new TableSchema(
-                $table->name, $foreignColumns
+                $table, $foreignColumns
             ))->getColumns()),
         ]);
     }

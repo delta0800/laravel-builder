@@ -119,7 +119,7 @@ class GenerateCrud extends Command
 
         $this->call('crud:policy', [
             'name' => $model.'Policy',
-            '--model' => $model
+            '--model' => $model,
         ]);
     }
 

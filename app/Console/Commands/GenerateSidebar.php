@@ -14,7 +14,6 @@ class GenerateSidebar extends GeneratorCommand
      *
      * @var string
      */
-    //protected $signature = 'generate:sidebar {--tables=}';
 
     protected $name = 'generate:sidebar';
 
@@ -112,7 +111,8 @@ class GenerateSidebar extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['tables', null, InputOption::VALUE_NONE, 'table columns']
+            ['tables', null, InputOption::VALUE_NONE, 'table columns'],
+            ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
         ];
     }
 
@@ -122,7 +122,7 @@ class GenerateSidebar extends GeneratorCommand
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::OPTIONAL, 'The name of the class'],
+            ['name', InputArgument::OPTIONAL, 'The name of the view'],
         ];
     }
 }

@@ -203,7 +203,8 @@ class TableController extends Controller
 
         Artisan::call('generate:sidebar', [
             'name' => 'nav',
-            '--tables' => $tables
+            '--tables' => $tables,
+            '--force' => true,
         ]);
 
         return response()->json([
