@@ -1,0 +1,4 @@
+
+            $table->foreign('DUMMYFIELDNAME')
+                ->references('id')->on('DUMMYFOREIGNTABLE')
+                ->onDelete('DUMMYONDELETE');

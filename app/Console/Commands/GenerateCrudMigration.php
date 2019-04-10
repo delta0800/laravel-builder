@@ -2,29 +2,36 @@
 
 namespace App\Console\Commands;
 
-use App\Core\ModelRelationHasStubHandler;
-use App\Core\ModelRelationBelongStubHandler;
+use App\Core\MigrationFieldStubHandler;
+use App\Core\MigrationForeignStubHandler;
 use App\Core\TableSchema;
-use Illuminate\Foundation\Console\ModelMakeCommand;
+use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Support\Str;
 
-class GenerateCrudModel extends ModelMakeCommand
+class GenerateCrudMigration extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'crud:model';
+    protected $name = 'crud:migration';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new model class';
+    protected $description = 'Create a new migration class';
+
+    /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'Migration';
 
     /**
      * Get the stub file for the generator.
@@ -33,7 +40,7 @@ class GenerateCrudModel extends ModelMakeCommand
      */
     protected function getStub()
     {
-        return app_path('Core/Stub/Model.stub');
+        return app_path('Core/Stub/Migration.stub');
     }
 
     /**
@@ -63,18 +70,11 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $table = $this->option('table');
 
-        $class = '';
-        $fullClass = '';
-        if($table->safe_delete) {
-            $class = 'use SoftDeletes;'."\n";
-            $fullClass = 'use Illuminate\Database\Eloquent\SoftDeletes;'."\n";
-        }
+        $model = str_replace('_', '', Str::title($table->name));
 
         return array_merge($replace, [
             'DummyTable' => $table->name,
-            'DummySoftDelete' => $class,
-            'DummyTimestamp' => $table->use_timestamp ? 'public $timestamps = false;'."\n" : '',
-            'DummyFullSoftDeleteClass' => $fullClass,
+            'DummyNameClass' => 'Create'.$model.'Table'
         ]);
     }
 
@@ -90,31 +90,17 @@ class GenerateCrudModel extends ModelMakeCommand
 
         $columns = collect($table->tableFields);
 
-        $fillableFields = $columns->whereNotIn('name',
-            ['password', 'email_verified_at', 'remember_token', 'updated_at', 'created_at']
-        );
-
-        $hiddenFields = $columns->whereIn('name',
-            ['password', 'email_verified_at', 'remember_token']
-        );
-
         $foreignColumns = $columns->filter(function ($value) {
             return $value->table != null;
         });
 
         return (array_merge($replace, [
-            'DummyFillableFields' => $this->buildInputs((new TableSchema(
-                $table, $fillableFields
+            'DummyFields' => $this->buildFields((new TableSchema(
+                $table, $columns
             ))->getColumns()),
-            'DummyHiddenFields' => $this->buildInputs((new TableSchema(
-                $table, $hiddenFields
-            ))->getColumns()),
-            'DummyRelationship' => $this->buildRelationship((new TableSchema(
+            'DummyForeignFields' => $this->buildForeignTable((new TableSchema(
                 $table, $foreignColumns
             ))->getColumns()),
-            'DummyRelationHasMany' => $this->buildRelationshipHasMany((new TableSchema(
-                $table, $columns
-            ))),
         ]));
     }
 
@@ -123,47 +109,40 @@ class GenerateCrudModel extends ModelMakeCommand
      *
      * @return string
      */
-    protected function buildInputs(Collection $columns)
+    protected function buildFields(Collection $columns)
+    {
+        $table = $this->option('table');
+
+        $html = '';
+
+        if ($columns) {
+            $columns->each(function ($column) use(&$html) {
+                $html .= rtrim((new MigrationFieldStubHandler($column))->getInput()).";\n";
+            });
+        }
+
+        $html .= $table->use_timestamp ? "\t\t\t".'$table->timestamps();'."\n" : '';
+        $html .= $table->safe_delete ? "\t\t\t".'$table->softDeletes();'."\n" : '';
+
+        return trim($html);
+    }
+
+    /**
+     * @param Collection $columns
+     *
+     * @return string
+     */
+    protected function buildForeignTable(Collection $columns)
     {
         $html = '';
 
         if ($columns) {
             $columns->each(function ($column) use(&$html) {
-                if($column->isPrimaryKey) {
-                    return null;
-                }
-
-                $html .= "'".$column->name."', ";
+                $html .= (new MigrationForeignStubHandler($column))->getInput()."\n";
             });
         }
 
-        return $html;
-    }
-
-    protected function buildRelationship(Collection $columns)
-    {
-        $html = '';
-
-        if ($columns) {
-            $columns->each(function ($column) use (&$html) {
-                $html .= (new ModelRelationBelongStubHandler($column))->getInput();
-            });
-        }
-
-        return $html;
-    }
-
-    protected function buildRelationshipHasMany($table)
-    {
-        $html = [];
-
-        if ($table) {
-            $html = ($table->primaryTables ? array_map(function ($table) {
-                return (new ModelRelationHasStubHandler($table))->getInput();
-            }, $table->primaryTables) : []);
-        }
-
-        return (implode($html));
+        return rtrim($html);
     }
 
     /**
@@ -189,6 +168,8 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return $this->laravel['path'].'/Models/'.str_replace('\\', '/', $name).'.php';
+        $date = now()->format('Y_m_d_his');
+
+        return '../database/migrations/'.$date.'_create_'.strtolower(str_plural($name)).'_table.php';
     }
 }

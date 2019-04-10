@@ -3,9 +3,12 @@
 namespace DummyNamespace;
 
 use Illuminate\Database\Eloquent\Model;
+DummyFullSoftDeleteClass
 
 class DummyClass extends Model
 {
+    DummySoftDelete
+    DummyTimestamp
     /**
      * @var string
      */

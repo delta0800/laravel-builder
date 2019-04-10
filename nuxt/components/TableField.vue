@@ -242,8 +242,12 @@ export default {
       deep: true
     },
     'fields.allow_null': {
-      handler(value) {
-        this.fields.default = this.fields.allow_null ? 'NULL' : ''
+      handler(value, old) {
+        if (!old) {
+          this.fields.default = this.fields.default
+        } else {
+          this.fields.default = this.fields.allow_null ? 'NULL' : ''
+        }
       },
       deep: true
     },

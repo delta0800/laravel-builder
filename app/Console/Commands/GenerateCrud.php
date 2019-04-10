@@ -53,6 +53,13 @@ class GenerateCrud extends Command
         );
 
         $modelClass = 'App\\'.$model;
+
+        $this->call('crud:migration', [
+            'name' => $model,
+            '--force' => $force,
+            '--table' => $table,
+        ]);
+
         $this->call('crud:model', [
             'name' => $model,
             '--force' => $force,

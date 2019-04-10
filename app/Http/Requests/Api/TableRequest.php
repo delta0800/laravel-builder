@@ -35,7 +35,7 @@ class TableRequest extends FormRequest
             ],
             'table.sequence' => ['nullable'],
             'table.use_timestamp' => ['nullable','boolean'],
-            'table.safe_delete' => ['nullable','boolean'],
+            'table.soft_delete' => ['nullable','boolean'],
         ];
     }
 }

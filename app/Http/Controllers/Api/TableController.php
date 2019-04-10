@@ -53,7 +53,7 @@ class TableController extends Controller
 
         $tabledata['use_timestamp'] = request()->has('table.use_timestamp');
 
-        $tabledata['safe_delete'] = request()->has('table.safe_delete');
+        $tabledata['soft_delete'] = request()->has('table.soft_delete');
 
         $fields = collect($data['fields']);
 
@@ -121,13 +121,13 @@ class TableController extends Controller
     {
         $data = $request->all();
 
-        // return response()->json($data);
+        //return response()->json($request->only('table'));
 
         $tabledata = $data['table'];
 
         $tabledata['use_timestamp'] = request()->has('table.use_timestamp');
 
-        $tabledata['safe_delete'] = request()->has('table.safe_delete');
+        $tabledata['soft_delete'] = request()->has('table.soft_delete');
 
         $fields = collect($data['fields']);
 
@@ -192,6 +192,8 @@ class TableController extends Controller
     public function generator(Request $request)
     {
         $tableId = $request['tableId'];
+
+        //$tableId = [3, 4];
 
         foreach ($tableId as $id) {
             Artisan::call('generate:crud', [

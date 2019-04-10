@@ -99,6 +99,20 @@ class ColumnSchema
     public $table;
 
     /**
+     * Column onDelete
+     *
+     * @var string
+     */
+    public $onDelete;
+
+    /**
+     * Column onUpdate
+     *
+     * @var string
+     */
+    public $onUpdate;
+
+    /**
      * Column display_field
      *
      * @var integer|null
@@ -151,7 +165,8 @@ class ColumnSchema
         $this->inputType = $attribute->inputType;
         $this->table = $attribute->table;
         $this->display_field = $attribute->display_field;
-
+        $this->onDelete = $attribute->onDelete;
+        $this->onUpdate = $attribute->onUpdate;
     }
 
     /**
@@ -172,7 +187,6 @@ class ColumnSchema
      */
     public function setPrimaryTable($primaryKey)
     {
-        $this->foreign_key = $primaryKey->foreign_key;
         $this->isPrimaryKey = true;
     }
 

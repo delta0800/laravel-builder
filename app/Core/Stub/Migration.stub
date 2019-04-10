@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTimestampAndSafeDeleteFieldToTablesTable extends Migration
+class DummyNameClass extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddTimestampAndSafeDeleteFieldToTablesTable extends Migration
      */
     public function up()
     {
-        Schema::table('tables', function (Blueprint $table) {
-            $table->boolean('use_timestamp');
-            $table->boolean('soft_delete');
+        Schema::create('DummyTable', function (Blueprint $table) {
+            DummyFields
+            DummyForeignFields
         });
     }
 
@@ -26,8 +26,6 @@ class AddTimestampAndSafeDeleteFieldToTablesTable extends Migration
      */
     public function down()
     {
-        Schema::table('tables', function (Blueprint $table) {
-            $table->dropColumn(['use_timestamp', 'soft_delete']);
-        });
+        Schema::dropIfExists('DummyTable');
     }
 }

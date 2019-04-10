@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Table extends Model
 {
     protected $fillable = [
-        'project_id', 'name', 'sequence', 'use_timestamp', 'safe_delete',
+        'project_id', 'name', 'sequence', 'use_timestamp', 'soft_delete',
     ];
 
     protected $casts = [
         'use_timestamp' => 'boolean',
-        'safe_delete' => 'boolean',
+        'soft_delete' => 'boolean',
     ];
 
     public function tableFields()
