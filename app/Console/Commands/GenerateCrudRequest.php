@@ -101,10 +101,15 @@ class GenerateCrudRequest extends GeneratorCommand
         $html = '';
 
         $columns->each(function ($column) use(&$html) {
-            if($column->isPrimaryKey) {
+            if ($column->isPrimaryKey) {
                 return null;
             }
-            $validation = "'required',";
+
+            if ($column->type == 'boolean') {
+                $validation = '';
+            } else {
+                $validation = "'required',";
+            }
             $validation .= $this->setValidation($column);
 
             $html .= "\n\t\t\t'".$column->name."' => [".$validation."],";
