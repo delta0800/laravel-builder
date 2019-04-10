@@ -178,7 +178,7 @@ class GenerateCrudController extends GeneratorCommand
                 $table, $columns
             ))->getColumns()),
 
-            'DummyForeignTables' => $this->buildForeign((new TableSchema(
+            'DummyForeignTables' => $this->buildForeignTables((new TableSchema(
                 $table, $columns
             ))->getColumns()),
 
@@ -215,7 +215,7 @@ class GenerateCrudController extends GeneratorCommand
         return $html;
     }
 
-    protected function buildForeign(Collection $columns)
+    protected function buildForeignTables(Collection $columns)
     {
         $html = '';
 

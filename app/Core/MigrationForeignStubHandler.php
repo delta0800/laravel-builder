@@ -48,6 +48,7 @@ class MigrationForeignStubHandler
             'DUMMYFOREIGNTABLE' => $this->columnSchema->table,
             'DUMMYONDELETE' => $this->columnSchema->onDelete,
             'DUMMYONUPDATE' => $this->columnSchema->onUpdate,
+            'DUMMYFOREIGNKEY' => $this->columnSchema->foreign_key,
         ];
     }
 

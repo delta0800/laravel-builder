@@ -65,7 +65,7 @@ class GenerateCrudModel extends ModelMakeCommand
 
         $class = '';
         $fullClass = '';
-        if($table->safe_delete) {
+        if($table->soft_delete) {
             $class = 'use SoftDeletes;'."\n";
             $fullClass = 'use Illuminate\Database\Eloquent\SoftDeletes;'."\n";
         }

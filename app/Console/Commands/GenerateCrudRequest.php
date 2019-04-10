@@ -104,9 +104,10 @@ class GenerateCrudRequest extends GeneratorCommand
             if($column->isPrimaryKey) {
                 return null;
             }
-            $validation = $this->setValidation($column);
+            $validation = "'required',";
+            $validation .= $this->setValidation($column);
 
-            $html .= "\n\t\t\t'".$column->name."' => ['required', ".$validation."],";
+            $html .= "\n\t\t\t'".$column->name."' => [".$validation."],";
         });
 
         return $html;
@@ -114,28 +115,32 @@ class GenerateCrudRequest extends GeneratorCommand
 
     protected function setValidation($column)
     {
-        if($column->inputType == 'email') {
+        if ($column->inputType == 'email') {
             return "'email', ";
         }
 
-        if($column->inputType == 'file' ) {
+        if ($column->inputType == 'file' ) {
             return "'file', ";
         }
 
-        if($column->inputType == 'image' ) {
+        if ($column->inputType == 'image' ) {
             return "'image', ";
         }
 
-        if($column->inputType == 'date' || $column->inputType == 'dateTime') {
+        if ($column->inputType == 'date' || $column->inputType == 'dateTime') {
             return "'date', ";
         }
 
-        if($column->inputType == 'number') {
+        if ($column->inputType == 'number') {
             return "'numeric', ";
         }
 
-        if($column->inputType == 'checkbox') {
+        if ($column->inputType == 'checkbox') {
             return "'boolean', ";
+        }
+
+        if ($column->table != null) {
+            return "'exists:".$column->table.",".$column->foreign_key."', ";
         }
     }
 
