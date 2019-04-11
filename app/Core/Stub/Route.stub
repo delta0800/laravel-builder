@@ -1,0 +1,2 @@
+
+Route::resource('/DummyRouteName', 'DummyModelClassController');

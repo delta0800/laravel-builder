@@ -85,6 +85,12 @@ class GenerateCrud extends Command
             '--table' => $table,
         ]);
 
+        $this->call('crud:route', [
+            'name' => $model,
+            '--force' => $force,
+            '--model' => $modelClass,
+        ]);
+
         $this->call('view:index', [
             'name' => $table->name,
             '--force' => $force,
