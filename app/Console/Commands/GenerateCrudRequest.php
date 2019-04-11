@@ -77,7 +77,9 @@ class GenerateCrudRequest extends GeneratorCommand
     {
         $table = $this->option('table');
 
-        $columns = collect($table->tableFields);
+        $columns = collect($table->tableFields)->filter(function ($column) {
+            return $column->use_on_form == true;
+        });
 
         $validateFields = $columns->where('allow_null', false);
 
