@@ -59,7 +59,7 @@ export default {
       this.$validator.validateAll().then(x => {
         if (x) {
           this.$axios.$post('/projects', this.form).then(res => {
-            this.$emit('refresh')
+            this.$store.commit('appendProject', res)
             this.showModal = false
             this.form.title = ''
           })

@@ -2,16 +2,20 @@
 
 namespace App\Core;
 
+use App\Table;
+use App\TableMany;
 use Illuminate\Support\Str;
 
-class ModelRelationHasStubHandler
+class ModelRelationManyStubHandler
 {
     /**
      * Column Name
      *
      * @var ColumnSchema
      */
-    public $columnSchema;
+    public $tableMany;
+
+    public $table;
 
     /**
      * Column constructor
@@ -20,9 +24,10 @@ class ModelRelationHasStubHandler
      *
      * @param $table
      */
-    public function __construct(Array $table)
+    public function __construct($table)
     {
-        $this->columnSchema = $table;
+        $this->tableMany = $table;
+        $this->table = Table::find($table->foreign_table);
     }
 
     /**
@@ -41,13 +46,13 @@ class ModelRelationHasStubHandler
      */
     public function getReplaceElements()
     {
-        $model = str_replace('_', '',Str::title(str_singular(array_get($this->columnSchema, 'foreign_table'))));
+        $model = str_replace('_', '',Str::title(str_singular(array_get($this->table, 'name'))));
         $modelClass = 'App\\'.$model;
 
         return [
-            'DUMMYFOREIGNMODELCLASS' => class_basename($modelClass),
-            'DUMMYFOREIGNKEY' => array_get($this->columnSchema, 'foreign_columns'),
-            'DUMMYFOREIGNMODELVARIABLE' => str_replace('_', '',array_get($this->columnSchema, 'foreign_table')),
+            'DUMMYFOREIGNMODELCLASS' => $modelClass,
+            'DUMMYFOREIGNKEY' => array_get($this->tableMany, 'foreign_key'),
+            'DUMMYFOREIGNMODELVARIABLE' => str_replace('_', '',array_get($this->table, 'name')),
         ];
     }
 
@@ -56,6 +61,6 @@ class ModelRelationHasStubHandler
      */
     protected function getStubPath()
     {
-        return file_get_contents(app_path("Core/Stub/HTML/Relation/RelationshipHas.stub"));
+        return file_get_contents(app_path("Core/Stub/HTML/Relation/ManyToMany.stub"));
     }
 }

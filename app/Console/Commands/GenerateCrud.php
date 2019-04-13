@@ -37,8 +37,7 @@ class GenerateCrud extends Command
             return;
         }
 
-        $table = Table::with('tableFields')->find($tableId);
-
+        $table = Table::with('tableFields', 'tableMany')->find($tableId);
 
         if (! Table::where('name', $table->name)->get()) {
             $this->error('Please provide valid table name');
@@ -59,6 +58,20 @@ class GenerateCrud extends Command
             '--force' => $force,
             '--table' => $table,
         ]);
+
+        if (count($table->tableMany) > 0) {
+            foreach ($table->tableMany as $tables) {
+                $foreign_table = Table::find($tables->foreign_table);
+                $models = str_replace('_', '', str_singular($table->name)).'_'.
+                    str_replace('_', '', str_singular($foreign_table->name));
+
+                $this->call('crud:pivot:migration', [
+                    'name' => $models,
+                    '--force' => $force,
+                    '--table' => $tables,
+                ]);
+            }
+        }
 
         $this->call('crud:model', [
             'name' => $model,

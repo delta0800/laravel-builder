@@ -2,12 +2,11 @@
 
 namespace DummyNamespace;
 
-use Illuminate\Database\Eloquent\Model;
-DummyFullSoftDeleteClass
+DummyFullUseClass
 
-class DummyClass extends Model
+class DummyClass extends DummyextendClass
 {
-    DummySoftDelete
+    DummyUseClass
     DummyTimestamp
     /**
      * @var string
@@ -35,4 +34,6 @@ class DummyClass extends Model
     DummyRelationship
 
     DummyRelationHasMany
+
+    DummyManyToManyRelation
 }

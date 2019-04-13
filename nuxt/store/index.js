@@ -1,10 +1,18 @@
 export const state = () => ({
-  tables: []
+  tables: [],
+  projects: []
 })
 
 export const mutations = {
-  setTable(state, tables) {
-    state.tables = tables
+  setProject(state, project) {
+    state.projects = project
+  },
+  appendProject(state, project) {
+    state.projects.push(project)
+  },
+
+  setTable(state, table) {
+    state.tables = table
   },
   appendTable(state, table) {
     state.tables.push(table)

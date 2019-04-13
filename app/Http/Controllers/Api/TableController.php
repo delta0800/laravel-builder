@@ -23,7 +23,7 @@ class TableController extends Controller
         $project = Project::where('slug', $slug)->first();
 
         return response()->json(
-            Table::with('tableFields')
+            Table::with('tableFields', 'tableMany')
                 ->where('project_id', $project->id)
                 ->get()
         );
@@ -48,6 +48,7 @@ class TableController extends Controller
     public function store(TableRequest $request)
     {
         $data = $request->all();
+        //return response()->json($data);
 
         $tabledata = $data['table'];
 
@@ -56,6 +57,8 @@ class TableController extends Controller
         $tabledata['soft_delete'] = request()->has('table.soft_delete');
 
         $fields = collect($data['fields']);
+
+        $manyTables = collect($data['tableMany']);
 
         $table = Table::create($tabledata);
 
@@ -83,7 +86,14 @@ class TableController extends Controller
             $table->tableFields()->create($field);
         });
 
-        return response()->json($table->load('tableFields'));
+        if ($data['use_many'] == true) {
+            $manyTables->map(function ($many) use ($table) {
+                $many['project_id'] = $table->project_id;
+                $table->tableMany()->create($many);
+            });
+        }
+
+        return response()->json($table->load('tableFields', 'tableMany'));
     }
 
     /**
@@ -95,7 +105,7 @@ class TableController extends Controller
     public function show($tableId)
     {
         return response()->json(
-            Table::with('tableFields')->find($tableId)
+            Table::with('tableFields', 'tableMany')->find($tableId)
         );
     }
 
@@ -113,15 +123,15 @@ class TableController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Table  $table
+     * @param TableRequest $request
+     * @param  \App\Table $table
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Table $table)
+    public function update(TableRequest $request, Table $table)
     {
         $data = $request->all();
 
-        //return response()->json($request->only('table'));
+        //return response()->json($data);
 
         $tabledata = $data['table'];
 
@@ -131,13 +141,14 @@ class TableController extends Controller
 
         $fields = collect($data['fields']);
 
-        $deletedId = $data['deletedId'];
+        $manyTables = collect($data['tableMany']);
 
         $table->fill($tabledata)->save();
 
         $request->validate([
             'fields.*.name' => [
                 'required',
+                //'unique:table_fields,name,NULL,id,table_id,'.$table->id,
                  Rule::unique('users')->ignore('id')
             ],
             'fields.*.type' => ['required'],
@@ -166,11 +177,26 @@ class TableController extends Controller
 
         });
 
-        if($deletedId) {
-            $table->tableFields()->whereIn('id', $deletedId)->delete();
+        if ($data['use_many'] == true) {
+            $manyTables->map(function ($many) use ($table) {
+                if(array_key_exists('id', $many)) {
+                    $table->tableMany()->where('id', $many['id'])->update($many);
+                } else {
+                    $many['project_id'] = $table->project_id;
+                    $table->tableMany()->create($many);
+                }
+            });
         }
 
-        return response()->json($table->load('tableFields'));
+        if ($data['deletedId']) {
+            $table->tableFields()->whereIn('id', $data['deletedId'])->delete();
+        }
+
+        if ($data['deletedManyId']) {
+            $table->tableMany()->whereIn('id', $data['deletedManyId'])->delete();
+        }
+
+        return response()->json($table->load('tableFields', 'tableMany'));
     }
 
     /**
@@ -191,9 +217,11 @@ class TableController extends Controller
 
     public function generator(Request $request)
     {
-        $tableId = $request['tableId'];
+//        $data = $request->all();
+//        $tableId = $data['tabId'];
+//        $packageId = $data['packageId'];
 
-        //$tableId = [3, 4];
+        $tableId = [1,2];
 
         foreach ($tableId as $id) {
             Artisan::call('generate:crud', [

@@ -36,5 +36,7 @@ Route::namespace('Api')
                 Route::post('/generate/crud', 'TableController@generator');
 
                 Route::delete('/tableField/delete/{tableField}', 'TableFieldController@destroy');
+
+                Route::get('/packages', 'PackageController@index');
  //           });
     });

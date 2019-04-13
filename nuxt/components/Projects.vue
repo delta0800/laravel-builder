@@ -1,6 +1,6 @@
 <template>
   <div>
-    <CreateProject @refresh="getProjects()"></CreateProject>
+    <CreateProject></CreateProject>
     <div class="d-flex flex-wrap mx-auto">
       <d-card v-for="project in projects" :key="project.id" class="w-30 m-3">
         <d-card-body>
@@ -25,18 +25,19 @@ export default {
   },
   data() {
     return {
-      projects: '',
       title: '',
       selectedProject: ''
     }
   },
-  mounted() {
-    this.getProjects()
+  computed: {
+    projects() {
+      return this.$store.state.projects
+    }
   },
   methods: {
     getProjects() {
       this.$axios.$get('/projects').then(res => {
-        this.projects = res
+        this.$store.commit('setProject', res)
       })
     },
     deleteProject(project) {

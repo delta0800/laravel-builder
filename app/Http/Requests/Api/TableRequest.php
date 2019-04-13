@@ -28,10 +28,12 @@ class TableRequest extends FormRequest
 
         $table = $data['table'];
 
+        $id = request()->has('table.id') ? $table['id'] : null;
+
         return [
             'table.name' => [
                 'required',
-                'unique:tables,name,NULL,id,project_id,'. $table['project_id'],
+                'unique:tables,name,'.$id.',id,project_id,'. $table['project_id'],
             ],
             'table.sequence' => ['nullable'],
             'table.use_timestamp' => ['nullable','boolean'],

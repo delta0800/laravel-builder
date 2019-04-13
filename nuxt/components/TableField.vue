@@ -238,6 +238,13 @@ export default {
         /* eslint-disable no-console */
         // console.log(old)
         this.fields.extra = value === 'primary' ? 'auto_increment' : ''
+        if (value !== 'foreign') {
+          this.fields.display_field = ''
+          this.fields.table = ''
+          this.fields.foreign_key = ''
+          this.fields.onDelete = ''
+          this.fields.onUpdate = ''
+        }
       },
       deep: true
     },

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Core\ModelRelationHasStubHandler;
 use App\Core\ModelRelationBelongStubHandler;
+use App\Core\ModelRelationManyStubHandler;
 use App\Core\TableSchema;
 use Illuminate\Foundation\Console\ModelMakeCommand;
 use Illuminate\Support\Collection;
@@ -65,17 +66,40 @@ class GenerateCrudModel extends ModelMakeCommand
 
         $class = '';
         $fullClass = '';
+
+        if($table->soft_delete || $table->notify) {
+            $class .= 'use ';
+        }
         if($table->soft_delete) {
-            $class = 'use SoftDeletes;'."\n";
-            $fullClass = 'use Illuminate\Database\Eloquent\SoftDeletes;'."\n";
+            $class .= 'SoftDeletes,';
+            $fullClass .= 'use Illuminate\Database\Eloquent\SoftDeletes;'."\n";
+        }
+        if($table->notify) {
+            $class .= 'Notifiable,';
+            $fullClass .= 'use Illuminate\Notifications\Notifiable;'."\n";
         }
 
-        return array_merge($replace, [
+        $useClass = '';
+        if($table->soft_delete || $table->notify) {
+            $useClass = rtrim($class, ',').";\n";
+        }
+
+        if ($table->auth)
+        {
+            $fullClass .= 'use Illuminate\Foundation\Auth\User as Authenticatable;'."\n";
+            $extendClass = 'Authenticatable';
+        } else {
+            $fullClass .= 'use Illuminate\Database\Eloquent\Model;'."\n";
+            $extendClass = 'Model';
+        }
+
+        return (array_merge($replace, [
             'DummyTable' => $table->name,
-            'DummySoftDelete' => $class,
+            'DummyUseClass' => $useClass,
             'DummyTimestamp' => $table->use_timestamp ? 'public $timestamps = false;'."\n" : '',
-            'DummyFullSoftDeleteClass' => $fullClass,
-        ]);
+            'DummyFullUseClass' => rtrim($fullClass, "\n"),
+            'DummyextendClass' => $extendClass,
+        ]));
     }
 
     /**
@@ -115,6 +139,7 @@ class GenerateCrudModel extends ModelMakeCommand
             'DummyRelationHasMany' => $this->buildRelationshipHasMany((new TableSchema(
                 $table, $columns
             ))),
+            'DummyManyToManyRelation' => $this->buildManyToManyRelation(collect($table->tableMany))
         ]));
     }
 
@@ -164,6 +189,19 @@ class GenerateCrudModel extends ModelMakeCommand
         }
 
         return (implode($html));
+    }
+
+    protected function buildManyToManyRelation($tables)
+    {
+        $html = '';
+
+        if ($tables) {
+            $tables->each(function ($table) use (&$html) {
+                $html .= (new ModelRelationManyStubHandler($table))->getInput();
+            });
+        }
+
+        return $html;
     }
 
     /**

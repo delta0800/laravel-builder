@@ -33,7 +33,7 @@
       <d-nav v-if="slug == null" class="flex-column">
         <li class="nav-item">
           <d-link class="nav-link" to="/projects">
-            <i class="fas fa-tachometer-alt"></i>
+            <i class="fas fa-tasks"></i>
             <span>Projects</span>
           </d-link>
         </li>
@@ -48,21 +48,22 @@
             class="nav-item"
           >
             <d-link class="nav-link" :to="`/project/${slug}/table/${table.id}`">
-              <i class="fas fa-tachometer-alt"></i>
+              <i class="fas fa-table"></i>
               <span>{{ table.name }}</span>
             </d-link>
           </li>
         </div>
         <li class="nav-item">
           <d-link class="nav-link" :to="`/project/${slug}/table/`">
-            <i class="fas fa-tachometer-alt"></i>
+            <i class="fas fa-tablet-alt"></i>
             <span>Add Table</span>
           </d-link>
         </li>
         <li class="nav-item">
-          <d-button class="m-2" size="sm" @click="generator">
-            Generator
-          </d-button>
+          <d-link class="nav-link" :to="`/project/${slug}/generator`">
+            <i class="fas fa-plus-circle"></i>
+            <span>Generator</span>
+          </d-link>
         </li>
       </d-nav>
     </div>
@@ -117,17 +118,6 @@ export default {
         this.$axios.$get(`/project/${this.slug}/tables`).then(tables => {
           this.$store.commit('setTable', tables)
         })
-      }
-    },
-    generator() {
-      /* eslint-disable no-console */
-      // console.log(this.tableId)
-      if (this.tableId) {
-        this.$axios
-          .$post('/generate/crud', { tableId: this.tableId })
-          .then(tables => {
-            alert('Successfully generate')
-          })
       }
     }
   }

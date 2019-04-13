@@ -31,9 +31,9 @@ export default {
     MainSidebar,
     MainNavbar
   },
-  data() {
-    return {
-      projects: []
+  computed: {
+    projects() {
+      return this.$store.state.projects
     }
   },
   mounted() {
@@ -42,7 +42,7 @@ export default {
   methods: {
     getProjects() {
       this.$axios.$get('/projects').then(res => {
-        this.projects = res
+        this.$store.commit('setProject', res)
       })
     }
   }

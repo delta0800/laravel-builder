@@ -1,0 +1,7 @@
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    */
+    public function DUMMYFOREIGNMODELVARIABLE()
+    {
+        return $this->belongsToMany('DUMMYFOREIGNMODELCLASS');
+    }

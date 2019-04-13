@@ -62,6 +62,6 @@ class ModelRelationBelongStubHandler
      */
     protected function getStubPath()
     {
-        return file_get_contents(app_path("Core/Stub/HTML/Views/Relationship.stub"));
+        return file_get_contents(app_path("Core/Stub/HTML/Relation/Relationship.stub"));
     }
 }

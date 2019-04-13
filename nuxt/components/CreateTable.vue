@@ -103,16 +103,59 @@
             </div>
           </d-card-body>
           <d-card-footer class="bg-teallight">
-            <d-row class="form-group mb-0">
-              <d-col class="col-2 text-right font-weight-lighter">
-                Use Timestamp:
+            <d-row class="form-group">
+              <d-col class="col-3 d-flex">
+                <div class="col-9 text-right font-weight-lighter px-1">
+                  Use Timestamp:
+                </div>
+                <d-checkbox v-model="form.table.use_timestamp"></d-checkbox>
               </d-col>
-              <d-checkbox v-model="form.table.use_timestamp"></d-checkbox>
-              <d-col class="col-2 font-weight-lighter text-right">
-                Soft Delete
+              <d-col class="col-2 d-flex">
+                <div class="col-8 font-weight-lighter text-right px-1">
+                  Soft Delete:
+                </div>
+                <d-checkbox v-model="form.table.soft_delete"></d-checkbox>
               </d-col>
-              <d-checkbox v-model="form.table.soft_delete"></d-checkbox>
+              <d-col class="col-2 d-flex">
+                <div class="col-8 font-weight-lighter text-right px-1">
+                  Notificable:
+                </div>
+                <d-checkbox v-model="form.table.notify"></d-checkbox>
+              </d-col>
+              <d-col class="col-2 d-flex">
+                <div class="col-10 font-weight-lighter text-right px-1">
+                  Authenticable:
+                </div>
+                <d-checkbox v-model="form.table.auth"></d-checkbox>
+              </d-col>
+              <d-col class="col-3 d-flex">
+                <div class="col-8 font-weight-lighter text-right px-1">
+                  Use Many to Many:
+                </div>
+                <d-checkbox v-model="form.use_many"></d-checkbox>
+              </d-col>
             </d-row>
+            <div v-if="form.use_many" class="border">
+              <TableMany
+                v-for="(field, index) in form.tableMany"
+                :key="field.id"
+                :index="index"
+                :field="field"
+                :form="form"
+                @remove="removeTableMany"
+                @refresh="refreshTableMany"
+              ></TableMany>
+              <div class="d-flex p-3">
+                <d-badge
+                  pill
+                  theme="secondary"
+                  class="cursor-pointer"
+                  @click.native="addTableMany"
+                >
+                  <i class="fas fa-plus"></i>
+                </d-badge>
+              </div>
+            </div>
           </d-card-footer>
         </d-form>
       </d-card>
@@ -122,10 +165,12 @@
 
 <script>
 import TableField from '~/components/TableField.vue'
+import TableMany from '~/components/TableMany.vue'
 
 export default {
   components: {
-    TableField
+    TableField,
+    TableMany
   },
   data() {
     return {
@@ -136,7 +181,10 @@ export default {
           sequence: ''
         },
         fields: [],
-        deletedId: []
+        deletedId: [],
+        tableMany: [],
+        deletedManyId: [],
+        use_many: false
       },
       tableId: null,
       selectedProject: '',
@@ -159,6 +207,14 @@ export default {
         this.getTable()
       },
       deep: true
+    },
+    'form.use_many': {
+      handler(value, old) {
+        if (value === true) {
+          this.form.tableMany = this.form.tableMany
+        }
+      },
+      deep: true
     }
   },
   mounted() {
@@ -172,6 +228,8 @@ export default {
         this.$axios.$get(`/tables/${this.tableId}`).then(res => {
           this.form.table = res
           this.form.fields = res.table_fields
+          this.form.tableMany = res.table_many
+          this.form.use_many = this.form.tableMany.length > 0
         })
       }
       if (!this.tableId) {
@@ -215,6 +273,7 @@ export default {
     handleOnSubmit(e) {
       e.preventDefault()
       this.form.table.project_id = this.selectedProject.id
+      // console.log(this.form)
       this.$validator.validateAll().then(x => {
         if (x) {
           if (this.tableId) {
@@ -228,8 +287,6 @@ export default {
                 this.$store.commit('updateTable', res)
               })
           } else {
-            /* eslint-disable no-console */
-            // console.log(this.form)
             this.$axios.$post('/tables', this.form).then(res => {
               this.alert = 'Record has been Successfully added!'
               this.timeUntilDismissed = this.duration
@@ -238,6 +295,7 @@ export default {
               this.form.table.project_id = ''
               this.form.table.name = ''
               this.form.table.sequence = ''
+              this.form.use_many = false
             })
           }
         }
@@ -258,6 +316,28 @@ export default {
       if (payload.id) {
         const fieldIndex = this.form.fields.findIndex(x => x.id === payload.id)
         this.$set(this.form.fields, fieldIndex, payload)
+      }
+    },
+    addTableMany() {
+      this.form.tableMany.push({
+        table_key: '',
+        foreign_table: '',
+        foreign_key: ''
+      })
+    },
+    removeTableMany(fields) {
+      if (this.tableId) {
+        this.form.deletedManyId.push(fields.id)
+      }
+
+      this.form.tableMany.splice(this.form.tableMany.indexOf(fields), 1)
+    },
+    refreshTableMany(payload) {
+      if (payload.id) {
+        const fieldIndex = this.form.tableMany.findIndex(
+          x => x.id === payload.id
+        )
+        this.$set(this.form.tableMany, fieldIndex, payload)
       }
     }
   }
