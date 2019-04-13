@@ -15,7 +15,9 @@ class PackageController extends Controller
      */
     public function index()
     {
-        return response()->json(Package::all());
+        $package = Package::with('projects')->orderBy('sequence')->get();
+
+        return response()->json($package);
     }
 
     /**

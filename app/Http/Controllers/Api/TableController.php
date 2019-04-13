@@ -215,13 +215,22 @@ class TableController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function generator(Request $request)
     {
-//        $data = $request->all();
-//        $tableId = $data['tabId'];
-//        $packageId = $data['packageId'];
+        $data = $request->all();
 
-        $tableId = [1,2];
+        $tableId = $data['tabId'];
+        $packageId = $data['packageId'];
+
+        $project = Project::where('slug', $data['slug'])->first();
+
+        $project->packages()->sync($packageId);
+
+        //$tableId = [1,2];
 
         foreach ($tableId as $id) {
             Artisan::call('generate:crud', [

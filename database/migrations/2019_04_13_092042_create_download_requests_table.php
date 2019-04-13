@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectPackagesTable extends Migration
+class CreateDownloadRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,12 @@ class CreateProjectPackagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('project_packages', function (Blueprint $table) {
+        Schema::create('download_requests', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('project_id');
-            $table->unsignedInteger('package_id');
+            $table->string('filename');
+            $table->integer('version')->default(0);
             $table->timestamps();
-
-            $table->foreign('project_id')
-                ->references('id')->on('projects')
-                ->onDelete('cascade');
-
-            $table->foreign('package_id')
-                ->references('id')->on('packages')
-                ->onDelete('cascade');
         });
     }
 
@@ -36,6 +29,6 @@ class CreateProjectPackagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('project_packages');
+        Schema::dropIfExists('download_requests');
     }
 }

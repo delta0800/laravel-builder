@@ -58,11 +58,12 @@ export default {
   data() {
     return {
       tables: [],
-      packages: '',
+      packages: [],
       form: {
         tabId: [],
         packageId: [],
-        generat: 'project'
+        generat: 'project',
+        slug: null
       }
     }
   },
@@ -73,6 +74,13 @@ export default {
         tId.push(table.id)
       })
       return tId
+    },
+    packId() {
+      const pId = []
+      this.packages.map(function(packag) {
+        pId.push(packag.id)
+      })
+      return pId
     }
   },
   watch: {
@@ -80,18 +88,31 @@ export default {
       handler(value) {
         this.form.tabId = this.tableId
       }
+    },
+    packages: {
+      handler(value) {
+        this.form.packageId = ''
+      }
+    },
+    '$route.params.slug': {
+      handler(value) {
+        this.form.slug = value
+        this.getTable()
+      },
+      deep: true
     }
   },
   mounted() {
-    this.slug = this.$route.params.slug
+    this.form.slug = this.$route.params.slug
     this.getTable()
     this.getPackage()
     this.form.tabId = this.tableId
+    this.form.packageId = this.packId
   },
   methods: {
     getTable() {
-      if (this.slug) {
-        this.$axios.$get(`/project/${this.slug}/tables`).then(tables => {
+      if (this.form.slug) {
+        this.$axios.$get(`/project/${this.form.slug}/tables`).then(tables => {
           this.tables = tables
         })
       }

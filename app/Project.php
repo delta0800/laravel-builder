@@ -28,4 +28,12 @@ class Project extends Model
     {
         return $this->hasMany(Table::class, 'project_id');
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function packages()
+    {
+        return $this->belongsToMany(Package::class, 'project_package');
+    }
 }
