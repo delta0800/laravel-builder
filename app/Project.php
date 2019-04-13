@@ -29,6 +29,11 @@ class Project extends Model
         return $this->hasMany(Table::class, 'project_id');
     }
 
+    public function downloadRequest()
+    {
+        return $this->hasMany(DownloadRequest::class, 'project_id');
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

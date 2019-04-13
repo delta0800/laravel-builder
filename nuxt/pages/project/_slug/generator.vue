@@ -89,11 +89,11 @@ export default {
         this.form.tabId = this.tableId
       }
     },
-    packages: {
-      handler(value) {
-        this.form.packageId = ''
-      }
-    },
+    // packages: {
+    //   handler(value) {
+    //     this.form.packageId = ''
+    //   }
+    // },
     '$route.params.slug': {
       handler(value) {
         this.form.slug = value

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Console\Commands\GenerateCrud;
+use App\DownloadRequest;
+use App\Events\GenerateCurd;
 use App\Project;
 use App\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TableRequest;
@@ -223,28 +228,27 @@ class TableController extends Controller
     {
         $data = $request->all();
 
-        $tableId = $data['tabId'];
         $packageId = $data['packageId'];
 
         $project = Project::where('slug', $data['slug'])->first();
 
+        $download = DownloadRequest::where('project_id', $project->id)->latest()->first();
+
         $project->packages()->sync($packageId);
 
-        //$tableId = [1,2];
+        $downloadRequest = DownloadRequest::create([
+            'project_id' => $project->id,
+            'table_id' => $data['tabId'],
+            'version' => $download ? $download->version + 1 : 1,
+        ]);
 
-        foreach ($tableId as $id) {
-            Artisan::call('generate:crud', [
-                'table' => $id,
-            ]);
+        if(! storage_path($project->id)) {
+            Storage::makeDirectory($project->id);
         }
 
-        $tables = Table::whereIn('id', $tableId)->get();
+        File::copyDirectory('../templet/default', storage_path($project->id.'/'.$downloadRequest->id));
 
-        Artisan::call('generate:sidebar', [
-            'name' => 'nav',
-            '--tables' => $tables,
-            '--force' => true,
-        ]);
+        //event(new GenerateCurd(DownloadRequest::find(10)));
 
         return response()->json([
             'success' => true,

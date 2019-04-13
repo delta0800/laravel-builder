@@ -214,6 +214,7 @@ class GenerateCrudModel extends ModelMakeCommand
         return array_merge(parent::getOptions(), [
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ]);
     }
 
@@ -225,8 +226,10 @@ class GenerateCrudModel extends ModelMakeCommand
      */
     protected function getPath($name)
     {
+        $path = $this->option('path');
+
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return $this->laravel['path'].'/Models/'.str_replace('\\', '/', $name).'.php';
+        return $path.'/'.$this->laravel['path'].'/'.str_replace('\\', '/', $name).'.php';
     }
 }

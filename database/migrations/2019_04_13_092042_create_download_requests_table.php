@@ -16,7 +16,8 @@ class CreateDownloadRequestsTable extends Migration
         Schema::create('download_requests', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('project_id');
-            $table->string('filename');
+            $table->json('table_id');
+            $table->string('filename')->nullable();
             $table->integer('version')->default(0);
             $table->timestamps();
         });

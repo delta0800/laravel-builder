@@ -6,6 +6,7 @@ use App\Table;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class GenerateCrud extends Command
 {
@@ -14,7 +15,7 @@ class GenerateCrud extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:crud {table}';
+    protected $signature = 'generate:crud {table} {--path=}';
 
     /**
      * The console command description.
@@ -31,6 +32,8 @@ class GenerateCrud extends Command
     public function handle()
     {
         $tableId = $this->argument('table');
+
+        $path = $this->option('path');
 
         if (! $tableId) {
             $this->error('please provide table');
@@ -57,96 +60,99 @@ class GenerateCrud extends Command
             'name' => $model,
             '--force' => $force,
             '--table' => $table,
+            '--path' => $path,
         ]);
 
-        if (count($table->tableMany) > 0) {
-            foreach ($table->tableMany as $tables) {
-                $foreign_table = Table::find($tables->foreign_table);
-                $models = str_replace('_', '', str_singular($table->name)).'_'.
-                    str_replace('_', '', str_singular($foreign_table->name));
-
-                $this->call('crud:pivot:migration', [
-                    'name' => $models,
-                    '--force' => $force,
-                    '--table' => $tables,
-                ]);
-            }
-        }
+//        if (count($table->tableMany) > 0) {
+//            foreach ($table->tableMany as $tables) {
+//                $foreign_table = Table::find($tables->foreign_table);
+//                $models = str_replace('_', '', str_singular($table->name)).'_'.
+//                    str_replace('_', '', str_singular($foreign_table->name));
+//
+//                $this->call('crud:pivot:migration', [
+//                    'name' => $models,
+//                    '--force' => $force,
+//                    '--table' => $tables,
+//                ]);
+//            }
+//        }
 
         $this->call('crud:model', [
             'name' => $model,
             '--force' => $force,
             '--table' => $table,
+            '--path' => $path,
         ]);
 
-        $this->call('crud:data:table', [
-            'name' => $model.'DataTables',
-            '--model' => $modelClass,
-            '--force' => $force,
-            '--table' => $table,
-        ]);
-
+//        $this->call('crud:data:table', [
+//            'name' => $model.'DataTables',
+//            '--model' => $modelClass,
+//            '--force' => $force,
+//            '--table' => $table,
+//            '--path' => $path,
+//        ]);
+//
         $this->call('crud:request', [
             'name' => $model.'Request',
             '--table' => $table,
         ]);
-
-        $this->call('crud:controller', [
-            'name' => $model.'Controller',
-            '--force' => $force,
-            '--model' => $modelClass,
-            '--table' => $table,
-        ]);
-
-        $this->call('crud:route', [
-            'name' => $model,
-            '--force' => $force,
-            '--model' => $modelClass,
-        ]);
-
-        $this->call('view:index', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--model' => $modelClass,
-        ]);
-
-        $this->call('view:form', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--model' => $modelClass,
-            '--table' => $table,
-        ]);
-
-        $this->call('view:create', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--model' => $modelClass,
-            '--table' => $table,
-        ]);
-
-        $this->call('view:edit', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--model' => $modelClass,
-            '--table' => $table,
-        ]);
-
-        $this->call('view:show', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--model' => $modelClass,
-            '--table' => $table,
-        ]);
-
-        $this->call('view:action', [
-            'name' => $table->name,
-            '--force' => $force,
-        ]);
-
-        $this->call('crud:policy', [
-            'name' => $model.'Policy',
-            '--model' => $model,
-        ]);
+//
+//        $this->call('crud:controller', [
+//            'name' => $model.'Controller',
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//            '--table' => $table,
+//        ]);
+//
+//        $this->call('crud:route', [
+//            'name' => $model,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//        ]);
+//
+//        $this->call('view:index', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//        ]);
+//
+//        $this->call('view:form', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//            '--table' => $table,
+//        ]);
+//
+//        $this->call('view:create', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//            '--table' => $table,
+//        ]);
+//
+//        $this->call('view:edit', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//            '--table' => $table,
+//        ]);
+//
+//        $this->call('view:show', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//            '--model' => $modelClass,
+//            '--table' => $table,
+//        ]);
+//
+//        $this->call('view:action', [
+//            'name' => $table->name,
+//            '--force' => $force,
+//        ]);
+//
+//        $this->call('crud:policy', [
+//            'name' => $model.'Policy',
+//            '--model' => $model,
+//        ]);
     }
 
     /**
@@ -167,7 +173,7 @@ class GenerateCrud extends Command
     protected function getOptions()
     {
         return [
-            // ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+             ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }

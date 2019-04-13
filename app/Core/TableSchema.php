@@ -167,6 +167,7 @@ class TableSchema
                 ->where('project_id', $this->table->project_id);
         })->get();
 
+        //dd($tables);
         if($tables) {
             foreach ($tables as $table) {
                 $this->primaryTables[] = $this->primaryKeyToArray($table);

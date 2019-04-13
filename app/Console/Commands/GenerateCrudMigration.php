@@ -155,6 +155,7 @@ class GenerateCrudMigration extends GeneratorCommand
         return array_merge(parent::getOptions(), [
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ]);
     }
 
@@ -166,10 +167,11 @@ class GenerateCrudMigration extends GeneratorCommand
      */
     protected function getPath($name)
     {
+        $path = $this->option('path');
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
         $date = now()->format('Y_m_d_his');
 
-        return '../database/migrations/'.$date.'_create_'.strtolower(str_plural($name)).'_table.php';
+        return $path.'/database/migrations/'.$date.'_create_'.strtolower(str_plural($name)).'_table.php';
     }
 }
