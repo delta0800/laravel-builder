@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-
 use App\User;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
@@ -78,7 +77,9 @@ class GenerateViewIndex extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return resource_path('views/' . $this->argument('name')) . '/index.blade.php';
+        $path = $this->option('path');
+
+        return $path . '/resources/views/' . $this->argument('name') . '/index.blade.php';
     }
 
     /**
@@ -91,6 +92,7 @@ class GenerateViewIndex extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }

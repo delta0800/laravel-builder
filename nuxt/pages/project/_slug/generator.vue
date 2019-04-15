@@ -42,7 +42,12 @@
               <d-radio v-model="form.generat" inline value="project">
                 Full Project
               </d-radio>
-              <d-button type="submit" class="ml-auto" size="sm">
+              <d-button
+                type="submit"
+                class="ml-auto"
+                size="sm"
+                :disabled="isProcessing"
+              >
                 Generat
               </d-button>
             </d-row>
@@ -64,7 +69,8 @@ export default {
         packageId: [],
         generat: 'project',
         slug: null
-      }
+      },
+      isProcessing: false
     }
   },
   computed: {
@@ -126,9 +132,11 @@ export default {
     },
     generator(e) {
       e.preventDefault()
+      this.isProcessing = true
       if (this.tableId) {
         this.$axios.$post('/generate/crud', this.form).then(tables => {
           alert('Successfully generate')
+          this.isProcessing = false
         })
       }
     }

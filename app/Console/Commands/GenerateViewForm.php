@@ -110,7 +110,9 @@ class GenerateViewForm extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return resource_path('views/' . $this->argument('name')) . '/inc/_form.blade.php';
+        $path = $this->option('path');
+
+        return $path . '/resources/views/' . $this->argument('name') . '/inc/_form.blade.php';
     }
 
     /**
@@ -124,6 +126,7 @@ class GenerateViewForm extends GeneratorCommand
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table columns'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }

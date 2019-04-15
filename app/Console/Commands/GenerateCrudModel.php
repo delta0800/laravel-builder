@@ -230,6 +230,6 @@ class GenerateCrudModel extends ModelMakeCommand
 
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
 
-        return $path.'/'.$this->laravel['path'].'/'.str_replace('\\', '/', $name).'.php';
+        return $path.'/app/'.str_replace('\\', '/', $name).'.php';
     }
 }

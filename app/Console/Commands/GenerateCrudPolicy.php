@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Core\ControllerFieldStubHandler;
-use App\Core\ControllerForeignStubHandler;
-use App\Core\TableSchema;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
-use Illuminate\Support\Collection;
 
 class GenerateCrudPolicy extends GeneratorCommand
 {
@@ -102,6 +99,21 @@ class GenerateCrudPolicy extends GeneratorCommand
     }
 
     /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $path = $this->option('path');
+
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $path.'/app/'.str_replace('\\', '/', $name).'.php';
+    }
+
+    /**
      * Get the console command options.
      *
      * @return array
@@ -111,6 +123,7 @@ class GenerateCrudPolicy extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }

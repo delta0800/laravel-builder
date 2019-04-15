@@ -63,19 +63,20 @@ class GenerateCrud extends Command
             '--path' => $path,
         ]);
 
-//        if (count($table->tableMany) > 0) {
-//            foreach ($table->tableMany as $tables) {
-//                $foreign_table = Table::find($tables->foreign_table);
-//                $models = str_replace('_', '', str_singular($table->name)).'_'.
-//                    str_replace('_', '', str_singular($foreign_table->name));
-//
-//                $this->call('crud:pivot:migration', [
-//                    'name' => $models,
-//                    '--force' => $force,
-//                    '--table' => $tables,
-//                ]);
-//            }
-//        }
+        if (count($table->tableMany) > 0) {
+            foreach ($table->tableMany as $many) {
+                $foreign_table = Table::find($many->foreign_table);
+                $models = str_replace('_', '', str_singular($table->name)).'_'.
+                    str_replace('_', '', str_singular($foreign_table->name));
+
+                $this->call('crud:pivot:migration', [
+                    'name' => $models,
+                    '--force' => $force,
+                    '--table' => $many,
+                    '--path' => $path,
+                ]);
+            }
+        }
 
         $this->call('crud:model', [
             'name' => $model,
@@ -84,75 +85,85 @@ class GenerateCrud extends Command
             '--path' => $path,
         ]);
 
-//        $this->call('crud:data:table', [
-//            'name' => $model.'DataTables',
-//            '--model' => $modelClass,
-//            '--force' => $force,
-//            '--table' => $table,
-//            '--path' => $path,
-//        ]);
-//
+        $this->call('crud:data:table', [
+            'name' => $model.'DataTables',
+            '--model' => $modelClass,
+            '--force' => $force,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
         $this->call('crud:request', [
             'name' => $model.'Request',
             '--table' => $table,
+            '--path' => $path,
         ]);
-//
-//        $this->call('crud:controller', [
-//            'name' => $model.'Controller',
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//            '--table' => $table,
-//        ]);
-//
-//        $this->call('crud:route', [
-//            'name' => $model,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//        ]);
-//
-//        $this->call('view:index', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//        ]);
-//
-//        $this->call('view:form', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//            '--table' => $table,
-//        ]);
-//
-//        $this->call('view:create', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//            '--table' => $table,
-//        ]);
-//
-//        $this->call('view:edit', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//            '--table' => $table,
-//        ]);
-//
-//        $this->call('view:show', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//            '--model' => $modelClass,
-//            '--table' => $table,
-//        ]);
-//
-//        $this->call('view:action', [
-//            'name' => $table->name,
-//            '--force' => $force,
-//        ]);
-//
-//        $this->call('crud:policy', [
-//            'name' => $model.'Policy',
-//            '--model' => $model,
-//        ]);
+
+        $this->call('crud:controller', [
+            'name' => $model.'Controller',
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
+        $this->call('crud:route', [
+            'name' => $model,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:index', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:form', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:create', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:edit', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:show', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--model' => $modelClass,
+            '--table' => $table,
+            '--path' => $path,
+        ]);
+
+        $this->call('view:action', [
+            'name' => $table->name,
+            '--force' => $force,
+            '--path' => $path,
+        ]);
+
+        $this->call('crud:policy', [
+            'name' => $model.'Policy',
+            '--model' => $model,
+            '--path' => $path,
+        ]);
     }
 
     /**

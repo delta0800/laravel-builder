@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Core\TableSchema;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class GenerateCrudRequest extends GeneratorCommand
@@ -161,6 +162,22 @@ class GenerateCrudRequest extends GeneratorCommand
         return array_merge(parent::getOptions(), [
             ['table', 't', InputOption::VALUE_REQUIRED, 'Table'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ]);
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $path = $this->option('path');
+
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $path.'/app/'.str_replace("\\" , "/", $name).'.php';
     }
 }

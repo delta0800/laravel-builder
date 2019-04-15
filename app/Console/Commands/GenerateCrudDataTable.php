@@ -6,6 +6,7 @@ use App\Core\DatatableFieldStubHandler;
 use App\Core\TableSchema;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class GenerateCrudDataTable extends GeneratorCommand
@@ -75,9 +76,9 @@ class GenerateCrudDataTable extends GeneratorCommand
         $replace = $this->buildFieldsReplacement($replace);
         $replace = $this->buildViewReplacements($replace);
 
-        return str_replace(
+        return (str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
-        );
+        ));
     }
 
     /**
@@ -183,7 +184,23 @@ class GenerateCrudDataTable extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
-            ['table', null, InputOption::VALUE_NONE, 'table columns']
+            ['table', null, InputOption::VALUE_NONE, 'table columns'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
+    }
+
+    /**
+     * Get the destination class path.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function getPath($name)
+    {
+        $path = $this->option('path');
+
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+
+        return $path.'/app/'.str_replace("\\" , "/", $name).'.php';
     }
 }

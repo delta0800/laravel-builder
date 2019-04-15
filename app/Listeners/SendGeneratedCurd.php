@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Events\GenerateCurd;
 use App\Table;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class SendGeneratedCurd
 {
@@ -29,8 +28,6 @@ class SendGeneratedCurd
 
         $path = storage_path($event->downloadRequest->project_id.'/'.$event->downloadRequest->id);
 
-        //dd($path);
-
         foreach ($tableId as $id) {
             Artisan::call('generate:crud', [
                 'table' => $id,
@@ -44,6 +41,7 @@ class SendGeneratedCurd
             'name' => 'nav',
             '--tables' => $tables,
             '--force' => true,
+            '--path' => $path,
         ]);
     }
 }

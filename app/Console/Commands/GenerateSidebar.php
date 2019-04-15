@@ -100,7 +100,9 @@ class GenerateSidebar extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return resource_path('views/layouts/partials/' . $this->argument('name')) . '.blade.php';
+        $path = $this->option('path');
+
+        return $path.'/resources/views/layouts/partials/' . $this->argument('name') . '.blade.php';
     }
 
     /**
@@ -113,6 +115,7 @@ class GenerateSidebar extends GeneratorCommand
         return [
             ['tables', null, InputOption::VALUE_NONE, 'table columns'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 

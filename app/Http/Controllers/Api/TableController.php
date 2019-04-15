@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Console\Commands\GenerateCrud;
 use App\DownloadRequest;
 use App\Events\GenerateCurd;
 use App\Project;
 use App\Table;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -248,7 +246,7 @@ class TableController extends Controller
 
         File::copyDirectory('../templet/default', storage_path($project->id.'/'.$downloadRequest->id));
 
-        //event(new GenerateCurd(DownloadRequest::find(10)));
+        event(new GenerateCurd($downloadRequest));
 
         return response()->json([
             'success' => true,

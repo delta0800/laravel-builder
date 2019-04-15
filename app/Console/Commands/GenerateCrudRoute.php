@@ -52,8 +52,10 @@ class GenerateCrudRoute extends GeneratorCommand
      */
     public function handle()
     {
+        $path = $this->option('path');
+
         file_put_contents(
-            base_path('routes/web.php'),
+            ($path.'/routes/web.php'),
             $this->compileControllerStub(),
             FILE_APPEND
         );
@@ -100,6 +102,7 @@ class GenerateCrudRoute extends GeneratorCommand
         return [
             ['model', 'm', InputOption::VALUE_REQUIRED, 'Model class'],
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }

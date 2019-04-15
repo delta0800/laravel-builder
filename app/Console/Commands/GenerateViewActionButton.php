@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands;
 
-
-use App\User;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -67,7 +65,9 @@ class GenerateViewActionButton extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        return resource_path('views/' . $this->argument('name')) . '/dtAction.blade.php';
+        $path = $this->option('path');
+
+        return $path . '/resources/views/' . $this->argument('name') . '/dtAction.blade.php';
     }
 
     /**
@@ -79,6 +79,7 @@ class GenerateViewActionButton extends GeneratorCommand
     {
         return [
             ['force', null, InputOption::VALUE_NONE, 'Create the crud if already exists'],
+            ['path', null, InputOption::VALUE_NONE, 'Create the crud path'],
         ];
     }
 }
