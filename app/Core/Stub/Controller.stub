@@ -41,7 +41,7 @@ class DummyClass extends Controller
     public function create()
     {
         DummyForeignTables
-        return view('DummyCreateView', compact(DummyForeignVariable));
+        return view('DummyCreateView'DummyForeignVariable);
     }
 
     /**
@@ -84,7 +84,7 @@ class DummyClass extends Controller
     public function edit(DummyModelClass $DummyModelClassVariable)
     {
         DummyForeignTables
-        return view('DummyUpdateView', compact('DummyModelClassVariable', DummyForeignVariable));
+        return view('DummyUpdateView', DummyEditCompactVariable);
     }
 
     /**

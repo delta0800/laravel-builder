@@ -138,14 +138,12 @@ class GenerateCrudController extends GeneratorCommand
         $pluralVar = strtolower(str_plural(class_basename($this->modelClass)));
 
         $listView = "{$pluralVar}.index";
-        $actionView = "{$pluralVar}.dtAction";
         $createView = "{$pluralVar}.create";
         $showView = "{$pluralVar}.show";
         $updateView = "{$pluralVar}.edit";
 
         return array_merge($replace, [
             'DummyIndexView' => $listView,
-            'DummyActionView' => $actionView,
             'DummyCreateView' => $createView,
             'DummyShowView' => $showView,
             'DummyUpdateView' => $updateView,
@@ -167,7 +165,7 @@ class GenerateCrudController extends GeneratorCommand
         $filtered = $columns->whereIn('inputType', ['checkbox', 'file', 'password']);
 
         $foreignColumns = $columns->filter(function ($column) {
-            return $column->table != null;
+            return $column->table !== null;
         });
 
         return array_merge($replace, [
@@ -184,6 +182,9 @@ class GenerateCrudController extends GeneratorCommand
             ))->getColumns()),
 
             'DummyForeignVariable' => $this->buildForeignVariable((new TableSchema(
+                $table, $foreignColumns
+            ))->getColumns()),
+            'DummyEditCompactVariable' => $this->buildEditCompactVariable((new TableSchema(
                 $table, $foreignColumns
             ))->getColumns()),
         ]);
@@ -231,11 +232,28 @@ class GenerateCrudController extends GeneratorCommand
     {
         $html = '';
 
+        if (count($columns)) {
+            $html .= ', compact(';
+
+            $columns->each(function ($column) use(&$html) {
+                $html .= "'".$column->table."', ";
+            });
+
+            $html = rtrim($html, ', ').")";
+        }
+
+        return $html;
+    }
+
+    protected function buildEditCompactVariable(Collection $columns)
+    {
+        $html = "compact('".strtolower(class_basename($this->modelClass))."'";
+
         $columns->each(function ($column) use(&$html) {
-            $html .= "'".$column->table."', ";
+            $html .= ", '".$column->table."'";
         });
 
-        return rtrim($html, ', ');
+        return $html . ")";
     }
 
     /**

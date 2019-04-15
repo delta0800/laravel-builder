@@ -26,7 +26,7 @@ class SendGeneratedCurd
     {
         $tableId = $event->downloadRequest->table_id;
 
-        $path = storage_path($event->downloadRequest->project_id.'/'.$event->downloadRequest->id);
+        $path = storage_path('app/generated/'.$event->downloadRequest->project_id.'/'.$event->downloadRequest->id);
 
         foreach ($tableId as $id) {
             Artisan::call('generate:crud', [

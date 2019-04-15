@@ -14,8 +14,8 @@ class AddAuthAndNotifyToTablesTable extends Migration
     public function up()
     {
         Schema::table('tables', function (Blueprint $table) {
-            $table->boolean('auth')->default(false);
-            $table->boolean('notify')->default(false);
+            $table->boolean('auth');
+            $table->boolean('notify');
         });
     }
 

@@ -153,12 +153,6 @@ class GenerateCrud extends Command
             '--path' => $path,
         ]);
 
-        $this->call('view:action', [
-            'name' => $table->name,
-            '--force' => $force,
-            '--path' => $path,
-        ]);
-
         $this->call('crud:policy', [
             'name' => $model.'Policy',
             '--model' => $model,

@@ -92,6 +92,9 @@ class GenerateCrudPolicy extends GeneratorCommand
                 'DummyModelClassVariable' => strtolower(class_basename($modelClass)),
                 'DummyModelClass' => class_basename($modelClass),
                 'DummyModelUse' => "use App\\". $modelClass,
+                'DummyAuthModelUse' => class_basename($modelClass) == 'User' ? '' : 'use App\User;',
+                'DummyAuthModel' => 'User',
+                'DummyAuthVariable' => '$authUser'
             ]);
         }
 

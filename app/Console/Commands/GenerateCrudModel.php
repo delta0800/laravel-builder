@@ -96,7 +96,7 @@ class GenerateCrudModel extends ModelMakeCommand
         return (array_merge($replace, [
             'DummyTable' => $table->name,
             'DummyUseClass' => $useClass,
-            'DummyTimestamp' => $table->use_timestamp ? 'public $timestamps = false;'."\n" : '',
+            'DummyTimestamp' => $table->use_timestamp ? 'public $timestamps = true;'."\n" : '',
             'DummyFullUseClass' => rtrim($fullClass, "\n"),
             'DummyextendClass' => $extendClass,
         ]));
@@ -152,7 +152,7 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $html = '';
 
-        if ($columns) {
+        if (count($columns)) {
             $columns->each(function ($column) use(&$html) {
                 if($column->isPrimaryKey) {
                     return null;
@@ -160,6 +160,8 @@ class GenerateCrudModel extends ModelMakeCommand
 
                 $html .= "'".$column->name."', ";
             });
+        } else {
+            $html = '//';
         }
 
         return $html;
@@ -169,7 +171,7 @@ class GenerateCrudModel extends ModelMakeCommand
     {
         $html = '';
 
-        if ($columns) {
+        if (count($columns)) {
             $columns->each(function ($column) use (&$html) {
                 $html .= (new ModelRelationBelongStubHandler($column))->getInput();
             });

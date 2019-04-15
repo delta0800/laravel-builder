@@ -48,7 +48,7 @@
                 size="sm"
                 :disabled="isProcessing"
               >
-                Generat
+                Generate
               </d-button>
             </d-row>
           </d-form>
@@ -70,7 +70,8 @@ export default {
         generat: 'project',
         slug: null
       },
-      isProcessing: false
+      isProcessing: false,
+      selectedPackage: []
     }
   },
   computed: {
@@ -83,9 +84,11 @@ export default {
     },
     packId() {
       const pId = []
-      this.packages.map(function(packag) {
-        pId.push(packag.id)
-      })
+      if (this.selectedPackage) {
+        this.selectedPackage.map(function(packag) {
+          pId.push(packag.id)
+        })
+      }
       return pId
     }
   },
@@ -95,11 +98,11 @@ export default {
         this.form.tabId = this.tableId
       }
     },
-    // packages: {
-    //   handler(value) {
-    //     this.form.packageId = ''
-    //   }
-    // },
+    selectedPackage: {
+      handler(value) {
+        this.form.packageId = this.packId
+      }
+    },
     '$route.params.slug': {
       handler(value) {
         this.form.slug = value
@@ -112,6 +115,7 @@ export default {
     this.form.slug = this.$route.params.slug
     this.getTable()
     this.getPackage()
+    this.getProject()
     this.form.tabId = this.tableId
     this.form.packageId = this.packId
   },
@@ -123,11 +127,20 @@ export default {
         })
       }
     },
+    getProject() {
+      if (this.form.slug) {
+        this.$axios.$get(`/project/${this.form.slug}`).then(res => {
+          if (res.packages) {
+            this.selectedPackage = res.packages
+          }
+          /* eslint-disable no-console */
+          // console.log(this.selectedPackage)
+        })
+      }
+    },
     getPackage() {
       this.$axios.$get(`/packages`).then(res => {
         this.packages = res
-        /* eslint-disable no-console */
-        // console.log(this.packages)
       })
     },
     generator(e) {

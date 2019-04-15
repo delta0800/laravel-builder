@@ -74,7 +74,6 @@ class GenerateCrudDataTable extends GeneratorCommand
         $replace = $this->buildModelReplacements($replace);
         $replace = $this->buildRouteReplacements($replace);
         $replace = $this->buildFieldsReplacement($replace);
-        $replace = $this->buildViewReplacements($replace);
 
         return (str_replace(
             array_keys($replace), array_values($replace), parent::buildClass($name)
@@ -135,20 +134,6 @@ class GenerateCrudDataTable extends GeneratorCommand
             'DummyFields' => $this->buildInputs((new TableSchema(
                 $table, $columns
             ))->getColumns())
-        ]);
-    }
-
-    /**
-     * @param array $replace
-     *
-     * @return array
-     */
-    protected function buildViewReplacements(array $replace)
-    {
-        $pluralVar = strtolower(str_plural(class_basename($this->modelClass)));
-
-        return array_merge($replace, [
-            'DummyActionView' => "{$pluralVar}.dtAction",
         ]);
     }
 

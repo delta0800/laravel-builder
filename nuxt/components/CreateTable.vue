@@ -273,21 +273,32 @@ export default {
     handleOnSubmit(e) {
       e.preventDefault()
       this.form.table.project_id = this.selectedProject.id
-      // console.log(this.form)
+      const data = this.form
+      if (this.form.table.use_timestamp === false) {
+        delete data.table.use_timestamp
+      }
+      if (this.form.table.soft_delete === false) {
+        delete data.table.soft_delete
+      }
+      if (this.form.table.auth === false) {
+        delete data.table.auth
+      }
+      if (this.form.table.notify === false) {
+        delete data.table.notify
+      }
+
       this.$validator.validateAll().then(x => {
         if (x) {
           if (this.tableId) {
-            this.$axios
-              .$put(`/tables/edit/${this.tableId}`, this.form)
-              .then(res => {
-                this.form.table = res
-                this.form.fields = res.table_fields
-                this.alert = 'Record has been Successfully updated!'
-                this.timeUntilDismissed = this.duration
-                this.$store.commit('updateTable', res)
-              })
+            this.$axios.$put(`/tables/edit/${this.tableId}`, data).then(res => {
+              this.form.table = res
+              this.form.fields = res.table_fields
+              this.alert = 'Record has been Successfully updated!'
+              this.timeUntilDismissed = this.duration
+              this.$store.commit('updateTable', res)
+            })
           } else {
-            this.$axios.$post('/tables', this.form).then(res => {
+            this.$axios.$post('/tables', data).then(res => {
               this.alert = 'Record has been Successfully added!'
               this.timeUntilDismissed = this.duration
               this.$store.commit('appendTable', res)
@@ -312,7 +323,6 @@ export default {
       this.timeUntilDismissed = time
     },
     refresh(payload) {
-      /* eslint-disable no-console */
       if (payload.id) {
         const fieldIndex = this.form.fields.findIndex(x => x.id === payload.id)
         this.$set(this.form.fields, fieldIndex, payload)

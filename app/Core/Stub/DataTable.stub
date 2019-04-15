@@ -37,7 +37,7 @@ class DummyClass extends BaseDatatableScope
                 //if(Gate::allows('delete', $DummyModelClassVariable)) {
                     $data['deleteUrl'] = route('DummyRouteName.destroy', $DummyModelClassVariable);
                 //}
-                return view('DummyActionView', $data);
+                return view('shared.dtAction', $data);
             })
             ->rawColumns(['actions'])
             ->make(true);

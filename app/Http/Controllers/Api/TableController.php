@@ -8,7 +8,6 @@ use App\Project;
 use App\Table;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\TableRequest;
@@ -134,13 +133,12 @@ class TableController extends Controller
     {
         $data = $request->all();
 
-        //return response()->json($data);
-
         $tabledata = $data['table'];
 
-        $tabledata['use_timestamp'] = request()->has('table.use_timestamp');
-
-        $tabledata['soft_delete'] = request()->has('table.soft_delete');
+        $tabledata['use_timestamp'] = \request()->has('table.use_timestamp');
+        $tabledata['soft_delete'] = \request()->has('table.soft_delete');
+        $tabledata['auth'] = \request()->has('table.auth');
+        $tabledata['notify'] = \request()->has('table.notify');
 
         $fields = collect($data['fields']);
 
@@ -240,11 +238,7 @@ class TableController extends Controller
             'version' => $download ? $download->version + 1 : 1,
         ]);
 
-        if(! storage_path($project->id)) {
-            Storage::makeDirectory($project->id);
-        }
-
-        File::copyDirectory('../templet/default', storage_path($project->id.'/'.$downloadRequest->id));
+        File::copyDirectory('../templetes/default', storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id));
 
         event(new GenerateCurd($downloadRequest));
 

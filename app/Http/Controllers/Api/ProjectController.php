@@ -53,7 +53,7 @@ class ProjectController extends Controller
     public function show($slug)
     {
         return response()->json(
-            Project::where('slug', $slug)->first()
+            Project::with('packages')->where('slug', $slug)->first()
         );
     }
 

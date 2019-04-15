@@ -2,7 +2,7 @@
 
 namespace DummyNamespace;
 
-use App\User;
+DummyAuthModelUse
 DummyModelUse;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,10 +13,10 @@ class DummyClass
     /**
      * Determine whether the user can index the DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function index(User $user)
+    public function index(DummyAuthModel DummyAuthVariable)
     {
         return true;
     }
@@ -24,10 +24,10 @@ class DummyClass
     /**
      * Determine whether the user can view the DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function view(User $user, DummyModelClass $DummyModelClassVariable)
+    public function view(DummyAuthModel DummyAuthVariable, DummyModelClass $DummyModelClassVariable)
     {
        return true;
     }
@@ -35,10 +35,10 @@ class DummyClass
     /**
      * Determine whether the user can create DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function create(User $user)
+    public function create(DummyAuthModel DummyAuthVariable)
     {
         return true;
     }
@@ -46,10 +46,10 @@ class DummyClass
     /**
      * Determine whether the user can show the DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function show(User $user, DummyModelClass $DummyModelClassVariable)
+    public function show(DummyAuthModel DummyAuthVariable, DummyModelClass $DummyModelClassVariable)
     {
        return true;
     }
@@ -57,10 +57,10 @@ class DummyClass
     /**
      * Determine whether the user can update the DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function update(User $user, DummyModelClass $DummyModelClassVariable)
+    public function update(DummyAuthModel DummyAuthVariable, DummyModelClass $DummyModelClassVariable)
     {
         return true;
     }
@@ -68,10 +68,10 @@ class DummyClass
     /**
      * Determine whether the user can delete the DummyModelClass.
      *
-     * @param  \App\User  $user
+     * @param  \App\User DummyAuthVariable
      * @return mixed
      */
-    public function delete(User $user, DummyModelClass $DummyModelClassVariable)
+    public function delete(DummyAuthModel DummyAuthVariable, DummyModelClass $DummyModelClassVariable)
     {
         return true;
     }

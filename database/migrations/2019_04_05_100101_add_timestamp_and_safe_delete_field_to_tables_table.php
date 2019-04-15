@@ -14,8 +14,8 @@ class AddTimestampAndSafeDeleteFieldToTablesTable extends Migration
     public function up()
     {
         Schema::table('tables', function (Blueprint $table) {
-            $table->boolean('use_timestamp')->default(false);
-            $table->boolean('soft_delete')->default(false);
+            $table->boolean('use_timestamp');
+            $table->boolean('soft_delete');
         });
     }
 

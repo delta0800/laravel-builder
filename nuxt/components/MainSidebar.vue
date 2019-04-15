@@ -62,7 +62,7 @@
         <li class="nav-item">
           <d-link class="nav-link" :to="`/project/${slug}/generator`">
             <i class="fas fa-plus-circle"></i>
-            <span>Generator</span>
+            <span>Generate</span>
           </d-link>
         </li>
       </d-nav>
