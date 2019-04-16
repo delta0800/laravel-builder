@@ -109,6 +109,13 @@ export default {
         this.getTable()
       },
       deep: true
+    },
+    'form.generat': {
+      handler(value) {
+        if (value === 'file') {
+          this.form.packageId = []
+        }
+      }
     }
   },
   mounted() {

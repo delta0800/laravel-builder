@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,7 +15,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         \App\Events\GenerateCurd::class => [
             \App\Listeners\SendGeneratedCurd::class
-        ]
+        ],
+        \App\Events\GenerateZipFile::class => [
+            \App\Listeners\GenerateZipFileListener::class
+        ],
     ];
 
     /**
@@ -25,7 +29,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

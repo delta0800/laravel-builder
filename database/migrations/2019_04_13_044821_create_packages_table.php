@@ -18,6 +18,7 @@ class CreatePackagesTable extends Migration
             $table->string('title');
             $table->text('link', 2000)->nullable();
             $table->string('composer', 500)->nullable();
+            $table->string('composer_version')->nullable();
             $table->integer('sequence');
             $table->timestamps();
         });

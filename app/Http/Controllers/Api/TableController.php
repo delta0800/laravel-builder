@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\DownloadRequest;
 use App\Events\GenerateCurd;
+use App\Package;
 use App\Project;
 use App\Table;
 use Illuminate\Http\Request;
@@ -232,13 +233,27 @@ class TableController extends Controller
 
         $project->packages()->sync($packageId);
 
+        $composer = collect(Package::whereIn('id', $packageId)->pluck('composer_version', 'composer'));
+
         $downloadRequest = DownloadRequest::create([
             'project_id' => $project->id,
-            'table_id' => $data['tabId'],
+            'table_id' => json_encode($data['tabId']),
             'version' => $download ? $download->version + 1 : 1,
+            'composer' => json_encode($composer),
         ]);
 
-        File::copyDirectory('../templetes/default', storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id));
+        if ($data['generat'] == 'project') {
+            File::copyDirectory('../templetes/default', storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id));
+        } else {
+            File::makeDirectory(storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id));
+        }
+
+        $webpath = storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id).'/routes/web.php';
+
+        if (! File::exists($webpath)) {
+            File::makeDirectory(storage_path('app/generated/'.$project->id.'/'.$downloadRequest->id).'/routes');
+            file_put_contents($webpath, "<?php\n");
+        }
 
         event(new GenerateCurd($downloadRequest));
 

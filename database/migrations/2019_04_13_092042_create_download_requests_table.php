@@ -19,6 +19,7 @@ class CreateDownloadRequestsTable extends Migration
             $table->json('table_id');
             $table->string('filename')->nullable();
             $table->integer('version')->default(0);
+            $table->json('composer')->nullable();
             $table->timestamps();
         });
     }
