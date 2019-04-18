@@ -1,73 +1,91 @@
 <template>
-  <aside
-    :class="[
-      'main-sidebar',
-      'col-12',
-      'col-md-3',
-      'col-lg-2',
-      'px-0',
-      sidebarVisible ? 'open' : ''
-    ]"
+  <div
+    id="kt_aside"
+    class="kt-aside  kt-aside--fixed  kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop"
   >
-    <div class="main-navbar">
-      <d-navbar
-        class="navbar align-items-stretch navbar-light bg-white flex-md-nowrap border-bottom p-0"
-      >
-        <a class="navbar-brand w-100 mr-0" href="/" style="line-height: 25px;">
-          <div class="d-table m-auto">
-            <img
-              class="d-inline-block align-top mr-1"
-              src="/image/shards-dashboards.svg"
-              width="30"
-            />
-            <span class="d-none d-md-inline ml-1">Shards Dashboard</span>
-          </div>
+    <!-- begin:: Aside -->
+    <div
+      id="kt_aside_brand"
+      class="kt-aside__brand kt-grid__item "
+      kt-hidden-height="65"
+      style=""
+    >
+      <div class="kt-aside__brand-logo">
+        <a href="/">
+          <img alt="Logo" src="../assets/media/logo/logo-light.png" />
         </a>
-        <a class="toggle-sidebar d-sm-inline d-md-none d-lg-none">
-          <i class="material-icons">&#xE5C4;</i>
-        </a>
-      </d-navbar>
+      </div>
+      <div class="kt-aside__brand-tools">
+        <button id="kt_aside_toggler" class="kt-aside__brand-aside-toggler">
+          <span></span>
+        </button>
+      </div>
     </div>
 
-    <div class="nav-wrapper">
-      <d-nav v-if="slug == null" class="flex-column">
-        <li class="nav-item">
-          <d-link class="nav-link" to="/projects">
-            <i class="fas fa-tasks"></i>
-            <span>Projects</span>
-          </d-link>
-        </li>
-      </d-nav>
+    <!-- end:: Aside -->
 
-      <d-nav v-else class="flex-column">
-        <div v-if="tables">
+    <!-- begin:: Aside Menu -->
+    <div
+      id="kt_aside_menu_wrapper"
+      class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid"
+    >
+      <div
+        id="kt_aside_menu"
+        class="kt-aside-menu kt-scroll ps ps--active-y"
+        data-ktmenu-vertical="1"
+        data-ktmenu-scroll="1"
+        data-ktmenu-dropdown-timeout="500"
+        style="height: 227px; overflow: hidden;"
+      >
+        <ul v-if="slug == null" class="kt-menu__nav ">
+          <li class="kt-menu__item " aria-haspopup="true">
+            <a href="/projects" class="kt-menu__link ">
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-tasks"></i>
+              </span>
+              <span class="kt-menu__link-text">Projects</span>
+            </a>
+          </li>
+        </ul>
+        <ul v-else class="kt-menu__nav ">
           <li
             v-for="(table, index) in tables"
             :key="table.id"
             :index="index"
-            class="nav-item"
+            class="kt-menu__item "
+            aria-haspopup="true"
           >
-            <d-link class="nav-link" :to="`/project/${slug}/table/${table.id}`">
-              <i class="fas fa-table"></i>
-              <span>{{ table.name }}</span>
-            </d-link>
+            <a
+              :href="`/project/${slug}/table/${table.id}`"
+              class="kt-menu__link "
+            >
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-table"></i>
+              </span>
+              <span class="kt-menu__link-text">{{ table.name }}</span>
+            </a>
           </li>
-        </div>
-        <li class="nav-item">
-          <d-link class="nav-link" :to="`/project/${slug}/table/`">
-            <i class="fas fa-tablet-alt"></i>
-            <span>Add Table</span>
-          </d-link>
-        </li>
-        <li class="nav-item">
-          <d-link class="nav-link" :to="`/project/${slug}/generator`">
-            <i class="fas fa-plus-circle"></i>
-            <span>Generate</span>
-          </d-link>
-        </li>
-      </d-nav>
+          <li class="kt-menu__item " aria-haspopup="true">
+            <a :href="`/project/${slug}/table/`" class="kt-menu__link ">
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-tablet-alt"></i>
+              </span>
+              <span class="kt-menu__link-text">Add Table</span>
+            </a>
+          </li>
+          <li class="kt-menu__item " aria-haspopup="true">
+            <a :href="`/project/${slug}/generator`" class="kt-menu__link ">
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-plus-circle"></i>
+              </span>
+              <span class="kt-menu__link-text">Generate</span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </aside>
+    <!-- end:: Aside Menu -->
+  </div>
 </template>
 
 <script>
