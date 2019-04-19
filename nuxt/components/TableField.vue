@@ -1,139 +1,161 @@
 <template>
-  <div class="py-3 px-2 border-bottom">
-    <div id="my-accordion" class="d-flex" role="tab">
-      <no-ssr>
-        <div class="w-7 p-1">
-          <d-badge
-            pill
-            theme="light"
-            class="cursor-pointer"
-            @click.native="$emit('remove', fields)"
-          >
-            <i class="fas fa-trash-alt"></i>
-          </d-badge>
-          <d-input v-model="fields.id" type="text" class="d-none" />
-          <d-badge v-d-toggle.collsId pill theme="light" class="cursor-pointer">
-            <i class="fas fa-arrow-right"></i>
-          </d-badge>
+  <div class="pt-3 pb-1">
+    <div class="row px-2" role="tab">
+      <input v-model="fields.id" type="text" class="d-none" />
+      <div class="col-2">
+        <input v-model="fields.name" type="text" class="form-control" />
+      </div>
+      <div class="col-2 form-group mb-0">
+        <select v-model="fields.type" class="form-control">
+          <option v-for="type in types" :key="type.index" :value="type.value">
+            {{ type.text }}
+          </option>
+        </select>
+      </div>
+      <div class="col-1">
+        <input v-model="fields.length" type="text" class="form-control" />
+      </div>
+      <div class="col-1">
+        <input
+          v-if="fields.type == 'integer'"
+          v-model="fields.unsigned"
+          class="form-control"
+          type="checkbox"
+        />
+      </div>
+      <div class="col-1">
+        <input
+          v-model="fields.allow_null"
+          type="checkbox"
+          class="form-control"
+        />
+      </div>
+      <div class="col-1">
+        <select v-model="fields.key" class="form-control">
+          <option v-for="k in key" :key="k.index" :value="k.value">
+            {{ k.text }}
+          </option>
+        </select>
+      </div>
+      <div class="col-1">
+        <input v-model="fields.default" type="text" class="form-control" />
+      </div>
+      <div class="col-2">
+        <input v-model="fields.extra" type="text" class="form-control" />
+      </div>
+      <div class="col-1 px-0">
+        <div
+          class="collapsed btn btn-label-primary btn-pill btn-sm p-2"
+          @click="accrodian(index)"
+        >
+          <i class="fas fa-ellipsis-h"></i>
         </div>
-        <div class="w-15 py-1 pr-1">
-          <d-input
-            v-model="fields.name"
-            v-validate="'required'"
-            :class="[{ 'has-error': errors.has('name' + index) }]"
-            :name="'name' + index"
-            type="text"
-            size="sm"
-          />
-          <span
-            v-if="errors.has('name' + index)"
-            class="text-danger small"
-            v-text="errors.first('name' + index)"
-          />
-        </div>
-        <div class="w-15 p-1">
-          <d-form-select v-model="fields.type" :options="types" size="sm" />
-        </div>
-        <div class="w-10 p-1">
-          <d-input v-model="fields.length" type="text" size="sm" />
-        </div>
-        <div class="w-10 py-1 px-5">
-          <d-checkbox
-            v-if="fields.type == 'integer'"
-            v-model="fields.unsigned"
-          ></d-checkbox>
-        </div>
-        <div class="w-10 py-1 px-3">
-          <d-checkbox v-model="fields.allow_null"></d-checkbox>
-        </div>
-        <div class="w-15 p-1">
-          <d-form-select v-model="fields.key" :options="key" size="sm" />
-        </div>
-        <div class="w-10 p-1">
-          <d-input v-model="fields.default" type="text" size="sm" />
-        </div>
-        <div class="w-15 p-1">
-          <d-input v-model="fields.extra" type="text" size="sm" />
-        </div>
-      </no-ssr>
+        <span
+          class="btn btn-label-danger btn-pill btn-sm p-2"
+          @click="$emit('remove', fields)"
+          ><i class="fas fa-trash-alt"></i
+        ></span>
+      </div>
     </div>
 
-    <d-collapse id="collsId" accordion="my-accordion" role="tabpanel">
-      <div class="ml-6 mr-1 mt-2 pb-2 border rounded">
-        <div class="d-flex">
-          <d-col class="col-3">
-            <span class="font-weight-lighter small mb-0">Input Type</span>
-            <d-form-select
-              v-model="fields.inputType"
-              :options="inputTypes"
-              size="sm"
+    <div v-if="show == true && index == selectedIndex">
+      <div class="pb-2 border-bottom">
+        <div class="row my-3 px-3">
+          <div class="col-3">
+            <label class="mb-0">Input Type</label>
+            <select v-model="fields.inputType" class="form-control">
+              <option
+                v-for="type in inputTypes"
+                :key="type.index"
+                :value="type.value"
+              >
+                {{ type.text }}
+              </option>
+            </select>
+          </div>
+          <div v-show="fields.table && fields.key == 'foreign'" class="col-3">
+            <label class="mb-0">Display Field</label>
+            <select v-model="fields.display_field" class="form-control">
+              <option
+                v-for="tabFild in tableFields"
+                :key="tabFild.index"
+                :value="tabFild.name"
+              >
+                {{ tabFild.name }}
+              </option>
+            </select>
+          </div>
+          <div class="col-2">
+            <label class="mb-0">Show On List</label>
+            <input
+              v-model="fields.show_on"
+              type="checkbox"
+              class="form-control"
             />
-          </d-col>
-          <d-col v-show="fields.table && fields.key == 'foreign'" class="col-3">
-            <span class="font-weight-lighter small mb-0">Display Field</span>
-            <d-form-select
-              v-model="fields.display_field"
-              :options="tableFields"
-              value-field="name"
-              text-field="name"
-              size="sm"
+          </div>
+          <div class="col-2">
+            <label class="mb-0">Use On Form</label>
+            <input
+              v-model="fields.use_on_form"
+              type="checkbox"
+              class="form-control"
             />
-          </d-col>
-          <d-col class="col-3">
-            <span class="font-weight-lighter small mb-0">Show On List</span>
-            <d-checkbox v-model="fields.show_on"></d-checkbox>
-          </d-col>
-          <d-col class="col-3">
-            <span class="font-weight-lighter small mb-0">Use On Form</span>
-            <d-checkbox v-model="fields.use_on_form"></d-checkbox>
-          </d-col>
+          </div>
         </div>
-        <div class="d-flex">
-          <d-col v-show="fields.key == 'foreign'" class="col-3">
-            <span class="font-weight-lighter small mb-0">Table</span>
-            <d-form-select
-              v-model="fields.table"
-              :options="filteredTable"
-              value-field="name"
-              text-field="name"
-              size="sm"
-            />
-          </d-col>
-          <d-col v-if="fields.table && fields.key == 'foreign'" class="col-3">
-            <span class="font-weight-lighter small mb-0">Foreign key</span>
-            <d-form-select
+        <div v-show="fields.key == 'foreign'" class="row mb-3 px-3">
+          <div v-show="fields.key == 'foreign'" class="col-3">
+            <label class="mb-0">Table</label>
+            <select v-model="fields.table" class="form-control">
+              <option
+                v-for="fltTab in filteredTable"
+                :key="fltTab.index"
+                :value="fltTab.name"
+              >
+                {{ fltTab.name }}
+              </option>
+            </select>
+          </div>
+          <div v-if="fields.table && fields.key == 'foreign'" class="col-3">
+            <label class="mb-0">Foreign key</label>
+            <select
               v-model="fields.foreign_key"
               :options="filteredTableField"
-              value-field="name"
-              text-field="name"
-              size="sm"
-            />
-          </d-col>
-          <d-col
+              class="form-control"
+            >
+              <option
+                v-for="fltTabFld in filteredTableField"
+                :key="fltTabFld.index"
+                :value="fltTabFld.name"
+              >
+                {{ fltTabFld.name }}
+              </option>
+            </select>
+          </div>
+          <div
             v-if="fields.foreign_key && fields.key == 'foreign'"
             class="col-3"
           >
-            <span class="font-weight-lighter small mb-0">OnDelete</span>
-            <d-form-select
-              v-model="fields.onDelete"
-              :options="action"
-              size="sm"
-            />
-          </d-col>
-          <d-col
+            <label class="mb-0">OnDelete</label>
+            <select v-model="fields.onDelete" class="form-control">
+              <option v-for="act in action" :key="act.index" :value="act.value">
+                {{ act.text }}
+              </option>
+            </select>
+          </div>
+          <div
             v-if="fields.foreign_key && fields.key == 'foreign'"
             class="col-3"
           >
-            <span class="font-weight-lighter small mb-0">OnUpdate</span>
-            <d-form-select
-              v-model="fields.onUpdate"
-              :options="action"
-              size="sm"
-            />
-          </d-col>
+            <label class="font-weight-lighter small mb-0">OnUpdate</label>
+            <select v-model="fields.onUpdate" class="form-control">
+              <option v-for="act in action" :key="act.index" :value="act.value">
+                {{ act.text }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
-    </d-collapse>
+    </div>
   </div>
 </template>
 
@@ -183,7 +205,9 @@ export default {
       tableFields: [],
       fields: {},
       inputType: '',
-      display_field: ''
+      display_field: '',
+      selectedIndex: '',
+      show: false
     }
   },
   computed: {
@@ -279,6 +303,12 @@ export default {
   mounted() {
     this.fields = this.field
     this.fields.display_field = this.fields.foreign_key
+  },
+  methods: {
+    accrodian(index) {
+      this.selectedIndex = index
+      this.show = !this.show
+    }
   }
 }
 </script>

@@ -1,55 +1,62 @@
 <template>
-  <div class="py-3 px-3 border-bottom">
-    <div class="d-flex">
-      <no-ssr>
-        <div class="w-5">
-          <d-badge
-            pill
-            theme="secondary"
-            class="cursor-pointer"
-            @click.native="$emit('remove', fields)"
-          >
-            <i class="fas fa-trash-alt"></i>
-          </d-badge>
-          <d-input v-model="fields.id" type="text" class="d-none" />
+  <div class="py-3 px-2 border-bottom">
+    <div class="row">
+      <div class="col-3 form-group mb-0 d-flex">
+        <label class="col-form-label col-5 text-right px-1">
+          Table key:
+        </label>
+        <div class="col-7">
+          <select v-model="fields.table_key" class="form-control">
+            <option
+              v-for="fltTabFlt in filteredTableField"
+              :key="fltTabFlt.index"
+              :value="fltTabFlt.name"
+            >
+              {{ fltTabFlt.name }}
+            </option>
+          </select>
         </div>
-        <d-col class="w-30 d-flex">
-          <div class="col-5 text-right font-weight-lighter">
-            Table Key:
-          </div>
-          <d-form-select
-            v-model="fields.table_key"
-            :options="filteredTableField"
-            value-field="name"
-            text-field="name"
-            size="sm"
-          />
-        </d-col>
-        <d-col class="w-30 d-flex">
-          <div class="col-6 text-right font-weight-lighter">
-            Foreign Table:
-          </div>
-          <d-form-select
-            v-model="fields.foreign_table"
-            :options="foreignTable"
-            value-field="id"
-            text-field="name"
-            size="sm"
-          />
-        </d-col>
-        <d-col class="w-30 d-flex">
-          <div class="col-6 text-right font-weight-lighter">
-            Foreign Key:
-          </div>
-          <d-form-select
-            v-model="fields.foreign_key"
-            :options="foreignKeyField"
-            value-field="name"
-            text-field="name"
-            size="sm"
-          />
-        </d-col>
-      </no-ssr>
+      </div>
+      <div class="col-4 form-group mb-0 d-flex">
+        <div class="col-form-label col-5 text-right">
+          Foreign Table:
+        </div>
+        <div class="col-7">
+          <select v-model="fields.foreign_table" class="form-control">
+            <option
+              v-for="frnTab in foreignTable"
+              :key="frnTab.index"
+              :value="frnTab.id"
+            >
+              {{ frnTab.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-4 form-group mb-0 d-flex">
+        <div class="col-form-label col-5 text-right">
+          Foreign Key:
+        </div>
+        <div class="col-7">
+          <select v-model="fields.foreign_key" class="form-control">
+            <option
+              v-for="keyFld in foreignKeyField"
+              :key="keyFld.index"
+              :value="keyFld.name"
+            >
+              {{ keyFld.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-1 text-center">
+        <span
+          class="btn btn-label-danger btn-pill btn-sm p-2"
+          @click="$emit('remove', fields)"
+          ><i class="fas fa-trash-alt"></i
+        ></span>
+        <d-input v-model="fields.id" type="text" class="d-none" />
+      </div>
     </div>
   </div>
 </template>
@@ -106,7 +113,6 @@ export default {
     },
     'fields.foreign_table': {
       handler(value, old) {
-        /* eslint-disable no-console */
         if (!old) {
           this.fields.foreign_table = this.field.foreign_table
           this.fields.foreign_key = this.field.foreign_key

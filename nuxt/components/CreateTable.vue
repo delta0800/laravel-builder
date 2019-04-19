@@ -1,165 +1,193 @@
 <template>
-  <div>
-    <no-ssr>
-      <d-alert
-        dismissible
-        :show="timeUntilDismissed"
-        theme="success"
-        class="mb-2"
-        @alert-dismissed="timeUntilDismissed = 0"
-        @alert-dismiss-countdown="handleTimeChange"
-      >
-        <b v-text="alert" />
-      </d-alert>
-      <d-card>
-        <d-form @submit="handleOnSubmit">
-          <d-card-header class="bg-white py-4">
-            <d-row class="form-group">
-              <d-col class="col-2 text-right">
-                Table Name:
-              </d-col>
-              <d-col class="col-4">
-                <d-input
-                  v-model="form.table.name"
-                  v-validate="'required'"
-                  :class="[{ 'has-error': errors.has('tablename') }]"
-                  type="text"
-                  name="tablename"
-                />
-                <span
-                  v-if="errors.has('tablename')"
-                  class="text-danger small"
-                  v-text="errors.first('tablename')"
-                />
-              </d-col>
-              <d-col class="offset-3 col-2">
-                <d-button v-if="tableId" type="submit" size="sm">
-                  <i class="fas fa-pencil-alt mr-1"></i>Edit
-                </d-button>
-              </d-col>
-            </d-row>
-            <d-row class="form-group mb-0">
-              <d-col class="col-2 text-right">
-                Sequence:
-              </d-col>
-              <d-col class="col-4">
-                <d-input
-                  v-model="form.table.sequence"
-                  v-validate="'required'"
-                  :class="[{ 'has-error': errors.has('sequence') }]"
-                  type="text"
-                  name="sequence"
-                />
-                <span
-                  v-if="errors.has('sequence')"
-                  class="text-danger small"
-                  v-text="errors.first('sequence')"
-                />
-              </d-col>
-              <d-col class="offset-3 col-2">
-                <d-badge
-                  v-if="tableId"
-                  theme="primary"
-                  class="p-2 cursor-pointer"
-                  @click.native="deleteTable"
-                >
-                  <i class="fas fa-trash-alt mr-1"></i>Delete
-                </d-badge>
-                <d-button v-else size="sm" type="submit">
-                  <i class="fas fa-plus mr-1"></i>Add
-                </d-button>
-              </d-col>
-            </d-row>
-          </d-card-header>
-          <d-card-body class="p-0">
-            <div class="d-flex bg-teallight align-items-end px-2">
-              <div class="w-7 py-1 pl-3">#</div>
-              <div class="w-15 p-1">NAME</div>
-              <div class="w-15 p-1">TYPE</div>
-              <div class="w-10 p-1">LENGTH</div>
-              <div class="w-10 p-1">UNSIGNED</div>
-              <div class="w-10 p-1">ALLOW NULL</div>
-              <div class="w-15 p-1">KEY</div>
-              <div class="w-10 p-1">DEFAULT</div>
-              <div class="w-15 p-1">EXTRA</div>
+  <div class="card">
+    <form @submit="handleOnSubmit">
+      <div class="card-body border-bottom py-5">
+        <div class="row">
+          <div class="col-5 form-group mb-0 d-flex">
+            <label class="col-form-label col-4 text-right px-1">
+              Table Name:
+            </label>
+            <div class="col-8">
+              <input
+                v-model="form.table.name"
+                v-validate="'required'"
+                :class="[
+                  'form-control',
+                  { 'has-error': errors.has('tablename') }
+                ]"
+                type="text"
+                name="tablename"
+              />
+              <span
+                v-if="errors.has('tablename')"
+                class="text-danger small"
+                v-text="errors.first('tablename')"
+              />
             </div>
-            <TableField
-              v-for="(field, index) in form.fields"
-              :key="field.id"
-              :index="index"
-              :field="field"
-              @remove="remove"
-              @refresh="refresh"
-            ></TableField>
-            <div class="d-flex p-3">
-              <d-badge
-                pill
-                theme="light"
-                class="cursor-pointer"
-                @click.native="add"
-              >
-                <i class="fas fa-plus"></i>
-              </d-badge>
+          </div>
+          <div class="col-3 form-group mb-0 d-flex">
+            <label class="col-form-label col-5 text-right px-1">
+              Sequence:
+            </label>
+            <div class="col-7">
+              <input
+                v-model="form.table.sequence"
+                v-validate="'required'"
+                :class="[
+                  'form-control',
+                  { 'has-error': errors.has('sequence') }
+                ]"
+                type="text"
+                name="sequence"
+              />
+              <span
+                v-if="errors.has('sequence')"
+                class="text-danger small"
+                v-text="errors.first('sequence')"
+              />
             </div>
-          </d-card-body>
-          <d-card-footer class="bg-teallight">
-            <d-row class="form-group">
-              <d-col class="col-3 d-flex">
-                <div class="col-9 text-right font-weight-lighter px-1">
-                  Use Timestamp:
-                </div>
-                <d-checkbox v-model="form.table.use_timestamp"></d-checkbox>
-              </d-col>
-              <d-col class="col-2 d-flex">
-                <div class="col-8 font-weight-lighter text-right px-1">
-                  Soft Delete:
-                </div>
-                <d-checkbox v-model="form.table.soft_delete"></d-checkbox>
-              </d-col>
-              <d-col class="col-2 d-flex">
-                <div class="col-8 font-weight-lighter text-right px-1">
-                  Notificable:
-                </div>
-                <d-checkbox v-model="form.table.notify"></d-checkbox>
-              </d-col>
-              <d-col class="col-2 d-flex">
-                <div class="col-10 font-weight-lighter text-right px-1">
-                  Authenticable:
-                </div>
-                <d-checkbox v-model="form.table.auth"></d-checkbox>
-              </d-col>
-              <d-col class="col-3 d-flex">
-                <div class="col-8 font-weight-lighter text-right px-1">
-                  Use Many to Many:
-                </div>
-                <d-checkbox v-model="form.use_many"></d-checkbox>
-              </d-col>
-            </d-row>
-            <div v-if="form.use_many" class="border">
-              <TableMany
-                v-for="(field, index) in form.tableMany"
-                :key="field.id"
-                :index="index"
-                :field="field"
-                :form="form"
-                @remove="removeTableMany"
-                @refresh="refreshTableMany"
-              ></TableMany>
-              <div class="d-flex p-3">
-                <d-badge
-                  pill
-                  theme="secondary"
-                  class="cursor-pointer"
-                  @click.native="addTableMany"
-                >
-                  <i class="fas fa-plus"></i>
-                </d-badge>
-              </div>
+          </div>
+          <div class="col-2 text-right">
+            <button
+              v-if="tableId"
+              type="submit"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
+            >
+              <i class="fas fa-pencil-alt mr-1"></i>Edit
+            </button>
+            <button
+              v-else
+              type="submit"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
+            >
+              <i class="fas fa-plus mr-1"></i>Add
+            </button>
+          </div>
+          <div class="col-2 text-center px-0">
+            <button
+              v-if="tableId"
+              type="button"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
+              @click="deleteTable"
+            >
+              <i class="fas fa-trash-alt mr-1"></i>Delete
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-header">
+        <div class="row font-weight-bold">
+          <div class="col-2">Name</div>
+          <div class="col-2">Type</div>
+          <div class="col-1">Length</div>
+          <div class="col-1">Unsigned</div>
+          <div class="col-1">Allow Null</div>
+          <div class="col-1">Key</div>
+          <div class="col-1">Default</div>
+          <div class="col-2">Extra</div>
+          <div class="col-1"></div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <TableField
+          v-for="(field, index) in form.fields"
+          :key="field.id"
+          :index="index"
+          :field="field"
+          @remove="remove"
+          @refresh="refresh"
+        ></TableField>
+        <div class="d-flex p-3">
+          <span
+            class="btn btn-label-primary btn-pill btn-sm p-2 ml-auto"
+            @click="add"
+            ><i class="fas fa-plus"></i
+          ></span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="row mb-0 pb-3">
+          <div class="col-3 form-group mb-0 d-flex">
+            <label class="col-form-label col-9 text-right px-1">
+              Use Timestamp:
+            </label>
+            <div class="col-3">
+              <input
+                v-model="form.table.use_timestamp"
+                type="checkbox"
+                class="form-control"
+              />
             </div>
-          </d-card-footer>
-        </d-form>
-      </d-card>
-    </no-ssr>
+          </div>
+          <div class="col-2 form-group mb-0 d-flex">
+            <label class="col-form-label col-8 text-right px-1">
+              Soft Delete:
+            </label>
+            <div class="col-4">
+              <input
+                v-model="form.table.soft_delete"
+                type="checkbox"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-2 form-group mb-0 d-flex">
+            <label class="col-form-label col-8 text-right px-1">
+              Notificable:
+            </label>
+            <div class="col-4">
+              <input
+                v-model="form.table.notify"
+                type="checkbox"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-2 form-group mb-0 d-flex">
+            <label class="col-form-label col-9 text-right px-1">
+              Authenticable:
+            </label>
+            <div class="col-3">
+              <input
+                v-model="form.table.auth"
+                type="checkbox"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <div class="col-3 form-group mb-0 d-flex">
+            <label class="col-form-label col-8 text-right px-1">
+              Use Many to Many:
+            </label>
+            <div class="col-4">
+              <input
+                v-model="form.use_many"
+                type="checkbox"
+                class="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <div v-if="form.use_many" class="border mb-2 mx-4">
+          <TableMany
+            v-for="(field, index) in form.tableMany"
+            :key="field.id"
+            :index="index"
+            :field="field"
+            :form="form"
+            @remove="removeTableMany"
+            @refresh="refreshTableMany"
+          ></TableMany>
+          <div class="d-flex p-3">
+            <span
+              class="btn btn-label-primary btn-pill btn-sm p-2 ml-auto mr-2"
+              @click="addTableMany"
+              ><i class="fas fa-plus"></i
+            ></span>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -313,6 +341,7 @@ export default {
       })
     },
     deleteTable() {
+      console.log('aaaa')
       this.$axios.$delete(`/tables/delete/${this.tableId}`).then(res => {
         this.$router.replace({
           path: `/project/${this.$route.params.slug}/table/`
@@ -357,5 +386,13 @@ export default {
 <style>
 .cursor-pointer {
   cursor: pointer;
+}
+.btn i {
+  padding: 4px;
+  line-height: 1rem;
+  cursor: pointer;
+}
+.border-bottom {
+  border-bottom: 1px solid #e8eaee !important;
 }
 </style>

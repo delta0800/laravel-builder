@@ -1,24 +1,24 @@
 <template>
-  <d-container fluid class="h-100">
-    <d-row>
-      <!-- Main Sidebar -->
-      <MainSidebar />
-      <d-col
-        class="main-content offset-lg-2 offset-md-3 p-0 col-sm-12 col-md-9 col-lg-10"
-        tag="main"
-        lg="10"
-        md="9"
-        sm="12"
+  <div
+    class="h-100 kt-header--fixed kt-header-mobile--fixed kt-subheader--fixed kt-subheader--enabled kt-subheader--solid kt-aside--enabled kt-aside--fixed kt-page--loading"
+  >
+    <!-- Main Sidebar -->
+    <MainSidebar />
+    <!-- Main Navbar -->
+    <div
+      id="kt_wrapper"
+      class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper"
+    >
+      <MainNavbar :projects="projects" />
+      <!-- Content -->
+      <section
+        id="kt_content"
+        class="kt-content kt-grid__item kt-grid__item--fluid"
       >
-        <!-- Main Navbar -->
-        <MainNavbar :projects="projects" />
-        <!-- Content -->
-        <section class="main-content-container p-4 container-fluid">
-          <nuxt />
-        </section>
-      </d-col>
-    </d-row>
-  </d-container>
+        <nuxt />
+      </section>
+    </div>
+  </div>
 </template>
 
 <script>

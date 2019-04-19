@@ -1,17 +1,30 @@
 <template>
   <div>
     <CreateProject></CreateProject>
-    <div class="d-flex flex-wrap mx-auto">
-      <d-card v-for="project in projects" :key="project.id" class="w-30 m-3">
-        <d-card-body>
-          <span>{{ project.title }}</span>
-        </d-card-body>
-        <d-card-footer class="d-flex p-2">
-          <d-button class="ml-auto" size="sm" @click="deleteProject(project)">
-            <i class="fas fa-trash-alt mr-1"></i>Delete
-          </d-button>
-        </d-card-footer>
-      </d-card>
+    <div class="row mx-auto">
+      <div v-for="project in projects" :key="project.id" class="col-4">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h5 class="cursor-pointer" @click="selectProject(project)">
+                {{ project.title }}
+              </h5>
+              <span
+                class="kt-badge kt-badge--unified-success kt-badge--md kt-badge--bold"
+                >{{ project.tables.length }}</span
+              >
+            </div>
+          </div>
+          <div class="card-footer d-flex">
+            <span
+              class="kt-badge kt-badge--unified-danger kt-badge--md ml-auto"
+              @click="deleteProject(project)"
+            >
+              <i class="fas fa-trash-alt fa-sm"></i>
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +57,22 @@ export default {
       this.$axios.$get(`projects/${project.id}`).then(res => {
         this.getProjects()
       })
+    },
+    selectProject(project) {
+      this.selectedProject = project.title
+      this.$router.replace({ path: `/project/${project.slug}/table/` })
     }
   }
 }
 </script>
+
+<style>
+.cursor-pointer {
+  cursor: pointer;
+}
+.kt-badge i {
+  padding: 4px;
+  line-height: 1rem;
+  cursor: pointer;
+}
+</style>

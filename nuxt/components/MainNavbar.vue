@@ -1,63 +1,63 @@
 <template>
-  <div class="main-navbar sticky-top bg-white">
-    <d-navbar type="light" class="align-items-center flex-md-nowrap p-0">
-      <d-navbar-nav class="flex-row">
-        <li class="nav-item dropdown ml-3">
-          <no-ssr>
-            <d-dropdown id="drop" :text="selectedProject" theme="light" is-nav>
-              <div v-for="project in projects" :key="project.id">
-                <d-dropdown-item @click.native="selectProject(project)">
-                  <i class="fa fa-tasks-alt"></i>
-                  {{ project.title }}
-                </d-dropdown-item>
-              </div>
-            </d-dropdown>
-          </no-ssr>
-        </li>
-      </d-navbar-nav>
-
-      <d-navbar-nav class="flex-row ml-auto">
-        <li class="nav-item dropdown mr-3">
-          <a
-            v-d-toggle.user-actions
-            class="nav-link dropdown-toggle text-nowrap px-3"
+  <div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed ">
+    <!-- begin:: Header Menu -->
+    <button
+      id="kt_header_menu_mobile_close_btn"
+      class="kt-header-menu-wrapper-close"
+    >
+      <i class="la la-close"></i>
+    </button>
+    <div id="kt_header_menu_wrapper" class="kt-header-menu-wrapper">
+      <div
+        id="kt_header_menu"
+        class="kt-header-menu kt-header-menu-mobile  kt-header-menu--layout-default "
+      >
+        <ul class="kt-menu__nav ">
+          <li
+            class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel kt-menu__item--active"
+            data-ktmenu-submenu-toggle="click"
+            aria-haspopup="true"
           >
-            <img
-              src="/image/default-avatar.png"
-              class="user-avatar rounded-circle mr-2"
-              alt="user-avatar"
-              width="30"
-            />
-            <span class="d-none d-md-inline-block">dhara</span>
-          </a>
-
-          <no-ssr>
-            <d-collapse
-              id="user-actions"
-              class="dropdown-menu dropdown-menu-small"
+            <a href="javascript:;" class="kt-menu__link kt-menu__toggle"
+              ><span class="kt-menu__link-text">Project</span></a
             >
-              <d-dropdown-item href="#">
-                <i class="fa fa-user"></i> My Profile
-              </d-dropdown-item>
-              <d-dropdown-item
-                href="#"
-                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-              >
-                <i class="material-icons text-danger">&#xE879;</i> Logout
-              </d-dropdown-item>
-              <form
-                id="logout-form"
-                action="/auth/login"
-                method="POST"
-                style="display: none;"
-              >
-                @csrf
-              </form>
-            </d-collapse>
-          </no-ssr>
-        </li>
-      </d-navbar-nav>
-    </d-navbar>
+            <div
+              class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left"
+            >
+              <ul class="kt-menu__subnav">
+                <li
+                  v-for="(project, index) in projects"
+                  :key="project.id"
+                  :index="index"
+                  class="kt-menu__item "
+                  aria-haspopup="true"
+                >
+                  <a href="/" class="kt-menu__link ">
+                    <span class="kt-menu__link-icon"> </span>
+                    <span class="kt-menu__link-text">{{ project.title }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="kt-header__topbar-item kt-header__topbar-item--user">
+      <div
+        class="kt-header__topbar-wrapper"
+        data-toggle="dropdown"
+        data-offset="0px,0px"
+      >
+        <div class="kt-header__topbar-user p-4">
+          <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
+          <span class="kt-header__topbar-username kt-hidden-mobile">Sean</span>
+          <img class="kt-hidden" alt="Pic" src="/image/default-avatar.png" />
+        </div>
+        <!--end: Navigation -->
+      </div>
+    </div>
+    <!-- end:: Header Topbar -->
   </div>
 </template>
 
