@@ -59,7 +59,7 @@ class DatatableFieldStubHandler
         return [
             'DUMMYFIELDDATA' => $this->columnSchema->name,
             'DUMMYFIELDNAME' => $this->columnSchema->name,
-            'DUMMYFIELDTITLE' => ucwords(str_replace('_', ' ', $this->columnSchema->name)),
+            'DUMMYFIELDTITLE' => $this->columnSchema->label,
         ];
     }
 

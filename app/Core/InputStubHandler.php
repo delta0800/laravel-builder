@@ -67,7 +67,7 @@ class InputStubHandler
     {
         return [
             'InputName' => $this->columnSchema->name,
-            'Placeholder' => ucwords(str_replace('_', ' ', $this->columnSchema->name)),
+            'Placeholder' => $this->columnSchema->label,
             'Option' => $this->columnSchema->table
         ];
     }

@@ -15,6 +15,13 @@ class ColumnSchema
     public $name;
 
     /**
+     * Column Label
+     *
+     * @var string
+     */
+    public $label;
+
+    /**
      * Column type
      *
      * @var Type
@@ -156,6 +163,7 @@ class ColumnSchema
     {
         $this->project_id = $attribute->project_id;
         $this->name = $attribute->name;
+        $this->label = $attribute->label;
         $this->type = $attribute->type;
         $this->length = $attribute->length;
         $this->default = $attribute->default;
@@ -183,7 +191,7 @@ class ColumnSchema
     /**
      * Set ForeignKey for the column
      *
-     * @param $foreignKey
+     * @param $primaryKey
      */
     public function setPrimaryTable($primaryKey)
     {

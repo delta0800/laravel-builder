@@ -49,7 +49,7 @@ class ShowViewStubHandler
     {
         return [
             'InputName' => $this->columnSchema->name,
-            'Placeholder' => ucwords(str_replace('_', ' ', $this->columnSchema->name)),
+            'Placeholder' => $this->columnSchema->label,
             'ModelVariable' => strtolower(class_basename($this->model)),
         ];
     }
