@@ -28,6 +28,7 @@ class TableController extends Controller
         return response()->json(
             Table::with('tableFields', 'tableMany')
                 ->where('project_id', $project->id)
+                ->orderBy('sequence')
                 ->get()
         );
     }
@@ -59,6 +60,10 @@ class TableController extends Controller
 
         $tabledata['soft_delete'] = request()->has('table.soft_delete');
 
+        $tabledata['auth'] = request()->has('table.auth');
+
+        $tabledata['notify'] = request()->has('table.notify');
+
         $fields = collect($data['fields']);
 
         $manyTables = collect($data['tableMany']);
@@ -82,6 +87,7 @@ class TableController extends Controller
             'fields.*.foreign_key' => ['nullable'],
             'fields.*.onDelete' => ['nullable'],
             'fields.*.onUpdate' => ['nullable'],
+            'fields.*.label' => ['nullable']
         ]);
 
         $fields->each(function ($field) use ($table) {
@@ -134,6 +140,8 @@ class TableController extends Controller
     {
         $data = $request->all();
 
+        //return response()->json($data);
+
         $tabledata = $data['table'];
 
         $tabledata['use_timestamp'] = \request()->has('table.use_timestamp');
@@ -165,6 +173,7 @@ class TableController extends Controller
             'fields.*.foreign_key' => ['nullable'],
             'fields.*.onDelete' => ['nullable'],
             'fields.*.onUpdate' => ['nullable'],
+            'fields.*.label' => ['nullable'],
         ]);
 
         $fields->map(function ($field) use ($table) {

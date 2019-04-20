@@ -68,35 +68,6 @@
         </div>
       </div>
     </div>
-    <!-- <modal v-if="showModal" @close="handleClose">
-      <modal-header>
-        <h5></h5>
-      </modal-header>
-      <modal-body>
-        <form @submit="handleOnSubmit">
-          <d-row class="form-group">
-            <label for="title col-2">Title</label>
-            <d-col class="col-10 ml-sm-2">
-              <d-input
-                v-model="form.title"
-                v-validate="'required'"
-                name="title"
-                :class="['mb-2', { 'has-error': errors.has('title') }]"
-                placeholder="title"
-              />
-              <span
-                v-if="errors.has('title')"
-                class="text-danger small"
-                v-text="errors.first('title')"
-              />
-            </d-col>
-          </d-row>
-          <d-row>
-            <d-button type="submit" class="ml-auto mr-4">Add</d-button>
-          </d-row>
-        </form>
-      </modal-body>
-    </modal> -->
   </div>
 </template>
 

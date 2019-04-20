@@ -1,60 +1,87 @@
 <template>
   <div class="d-flex">
-    <d-card class="w-50 mx-auto">
-      <d-card-body class="px-5">
-        <no-ssr>
-          <d-form @submit="generator">
-            <d-row class="mb-3">
-              <d-col class="col-6">
-                <h6>Table List</h6>
-                <div v-for="table in tables" :key="table.id">
-                  <d-row>
-                    <d-checkbox v-model="form.tabId" :value="'' + table.id">
-                    </d-checkbox>
-                    <div class="font-weight-lighter text-right">
-                      {{ table.name }}
-                    </div>
-                  </d-row>
+    <div class="w-50 mx-auto">
+      <form @submit="generator">
+        <div class="card p-3 mb-2">
+          <div class="row">
+            <div class="col-6">
+              <h5 class="mb-0">Table List</h5>
+            </div>
+            <div class="col-6">
+              <h5 class="mb-0">Package List</h5>
+            </div>
+          </div>
+        </div>
+        <div class="card p-3 mb-2">
+          <div class="row mb-3">
+            <div class="col-6">
+              <div class="form-group">
+                <div
+                  v-for="table in tables"
+                  :key="table.id"
+                  class="kt-checkbox-list"
+                >
+                  <label class="kt-checkbox">
+                    <input
+                      v-model="form.tabId"
+                      type="checkbox"
+                      :value="'' + table.id"
+                    />
+                    {{ table.name }}
+                    <span></span>
+                  </label>
                 </div>
-              </d-col>
-              <d-col class="col-6">
-                <h6>Package List</h6>
-                <div v-for="packag in packages" :key="packag.id">
-                  <d-row>
-                    <d-checkbox
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <div
+                  v-for="packag in packages"
+                  :key="packag.id"
+                  class="kt-checkbox-list"
+                >
+                  <label class="kt-checkbox kt-checkbox--brand">
+                    <input
                       v-model="form.packageId"
+                      type="checkbox"
                       :value="'' + packag.id"
-                    >
-                    </d-checkbox>
-                    <div class="font-weight-lighter text-right">
-                      <d-link :href="packag.link" target="_blank">
-                        {{ packag.title }}
-                      </d-link>
-                    </div>
-                  </d-row>
+                    />
+                    <a :href="packag.link" target="_blank">
+                      {{ packag.title }}
+                    </a>
+                    <span></span>
+                  </label>
                 </div>
-              </d-col>
-            </d-row>
-            <d-row>
-              <d-radio v-model="form.generat" inline class="mr-4" value="file">
-                Only File
-              </d-radio>
-              <d-radio v-model="form.generat" inline value="project">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card p-3">
+          <div class="form-group d-flex align-items-center mb-0">
+            <div class="kt-radio-inline">
+              <label class="kt-radio">
+                <input v-model="form.generat" type="radio" value="file" /> Only
+                File
+                <span></span>
+              </label>
+              <label class="kt-radio">
+                <input v-model="form.generat" type="radio" value="project" />
                 Full Project
-              </d-radio>
-              <d-button
-                type="submit"
-                class="ml-auto"
-                size="sm"
-                :disabled="isProcessing"
-              >
-                Generate
-              </d-button>
-            </d-row>
-          </d-form>
-        </no-ssr>
-      </d-card-body>
-    </d-card>
+                <span></span>
+              </label>
+            </div>
+            <button
+              type="submit"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm ml-auto"
+              size="sm"
+              :disabled="isProcessing"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 

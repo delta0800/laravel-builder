@@ -1,6 +1,6 @@
 <template>
-  <div class="py-3 px-2 border-bottom">
-    <div class="row">
+  <div class="card p-0 mb-2">
+    <div class="row p-3">
       <div class="col-3 form-group mb-0 d-flex">
         <label class="col-form-label col-5 text-right px-1">
           Table key:
@@ -49,7 +49,7 @@
           </select>
         </div>
       </div>
-      <div class="col-1 text-center">
+      <div class="col-1 text-right">
         <span
           class="btn btn-label-danger btn-pill btn-sm p-2"
           @click="$emit('remove', fields)"
@@ -126,7 +126,6 @@ export default {
           })
           this.fields.foreign_key = this.foreignKeyField[0].name
         }
-        // console.log(this.fields.foreign_key)
       },
       deep: true
     }

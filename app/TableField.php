@@ -9,6 +9,7 @@ class TableField extends Model
     protected $fillable = [
         'table_id', 'project_id', 'name', 'type', 'length', 'unsigned', 'allow_null', 'key', 'default', 'extra',
         'table', 'foreign_key', 'onDelete', 'onUpdate', 'inputType', 'display_field', 'show_on', 'use_on_form',
+        'label'
     ];
 
     protected $casts = [

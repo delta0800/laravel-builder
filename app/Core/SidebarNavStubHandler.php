@@ -52,7 +52,7 @@ class SidebarNavStubHandler
 
         return [
             'DummyModelVariable' => strtolower(class_basename($model)),
-            'DummyRouteName' => class_basename($model),
+            'DummyRouteName' => $this->table->label,
         ];
     }
 

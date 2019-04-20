@@ -1,8 +1,8 @@
 <template>
-  <div class="card">
+  <div>
     <form @submit="handleOnSubmit">
-      <div class="card-body border-bottom py-5">
-        <div class="row">
+      <div class="card py-3">
+        <div class="row mb-4">
           <div class="col-5 form-group mb-0 d-flex">
             <label class="col-form-label col-4 text-right px-1">
               Table Name:
@@ -25,11 +25,53 @@
               />
             </div>
           </div>
-          <div class="col-3 form-group mb-0 d-flex">
-            <label class="col-form-label col-5 text-right px-1">
+          <div class="col-5 form-group mb-0 d-flex">
+            <label class="col-form-label col-3 text-right px-1">
+              Menu Label:
+            </label>
+            <div class="col-8">
+              <input
+                v-model="form.table.label"
+                :class="['form-control', { 'has-error': errors.has('label') }]"
+                type="text"
+                name="label"
+              />
+              <span
+                v-if="errors.has('label')"
+                class="text-danger small"
+                v-text="errors.first('label')"
+              />
+            </div>
+          </div>
+          <div class="col-2 text-center">
+            <button
+              v-if="tableId"
+              type="submit"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm"
+            >
+              <i class="fas fa-pencil-alt mr-1"></i>Edit
+            </button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5 form-group mb-0 d-flex">
+            <label class="col-form-label col-4 text-right px-1">
+              Menu Icon:
+            </label>
+            <div class="col-8">
+              <input
+                v-model="form.table.icon"
+                :class="['form-control']"
+                type="text"
+                name="icon"
+              />
+            </div>
+          </div>
+          <div class="col-5 form-group mb-0 d-flex">
+            <label class="col-form-label col-3 text-right px-1">
               Sequence:
             </label>
-            <div class="col-7">
+            <div class="col-8">
               <input
                 v-model="form.table.sequence"
                 v-validate="'required'"
@@ -47,48 +89,37 @@
               />
             </div>
           </div>
-          <div class="col-2 text-right">
-            <button
-              v-if="tableId"
-              type="submit"
-              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
-            >
-              <i class="fas fa-pencil-alt mr-1"></i>Edit
-            </button>
-            <button
-              v-else
-              type="submit"
-              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
-            >
-              <i class="fas fa-plus mr-1"></i>Add
-            </button>
-          </div>
           <div class="col-2 text-center px-0">
             <button
               v-if="tableId"
               type="button"
-              class="btn btn-brand btn-elevate btn-pill btn-elevate-air"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm"
               @click="deleteTable"
             >
               <i class="fas fa-trash-alt mr-1"></i>Delete
             </button>
+            <button
+              v-else
+              type="submit"
+              class="btn btn-brand btn-elevate btn-pill btn-elevate-air btn-sm"
+            >
+              <i class="fas fa-plus mr-1"></i>Add
+            </button>
           </div>
         </div>
       </div>
-      <div class="card-header">
-        <div class="row font-weight-bold">
-          <div class="col-2">Name</div>
-          <div class="col-2">Type</div>
-          <div class="col-1">Length</div>
-          <div class="col-1">Unsigned</div>
-          <div class="col-1">Allow Null</div>
-          <div class="col-1">Key</div>
-          <div class="col-1">Default</div>
-          <div class="col-2">Extra</div>
-          <div class="col-1"></div>
-        </div>
+      <div class="row p-3 font-weight-bold">
+        <div class="col-2">Name</div>
+        <div class="col-1">Type</div>
+        <div class="col-1">Length</div>
+        <div class="col-1">Unsigned</div>
+        <div class="col-1">Null ?</div>
+        <div class="col-2">Key</div>
+        <div class="col-1">Default</div>
+        <div class="col-2">Extra</div>
+        <div class="col-1"></div>
       </div>
-      <div class="card-body p-0">
+      <div>
         <TableField
           v-for="(field, index) in form.fields"
           :key="field.id"
@@ -97,7 +128,7 @@
           @remove="remove"
           @refresh="refresh"
         ></TableField>
-        <div class="d-flex p-3">
+        <div class="d-flex px-3 pb-2">
           <span
             class="btn btn-label-primary btn-pill btn-sm p-2 ml-auto"
             @click="add"
@@ -105,8 +136,8 @@
           ></span>
         </div>
       </div>
-      <div class="card-footer">
-        <div class="row mb-0 pb-3">
+      <div class="card py-2 mb-2">
+        <div class="row mb-0">
           <div class="col-3 form-group mb-0 d-flex">
             <label class="col-form-label col-9 text-right px-1">
               Use Timestamp:
@@ -168,23 +199,23 @@
             </div>
           </div>
         </div>
-        <div v-if="form.use_many" class="border mb-2 mx-4">
-          <TableMany
-            v-for="(field, index) in form.tableMany"
-            :key="field.id"
-            :index="index"
-            :field="field"
-            :form="form"
-            @remove="removeTableMany"
-            @refresh="refreshTableMany"
-          ></TableMany>
-          <div class="d-flex p-3">
-            <span
-              class="btn btn-label-primary btn-pill btn-sm p-2 ml-auto mr-2"
-              @click="addTableMany"
-              ><i class="fas fa-plus"></i
-            ></span>
-          </div>
+      </div>
+      <div v-if="form.use_many && fieldsLength > 0" class="mb-2">
+        <TableMany
+          v-for="(field, index) in form.tableMany"
+          :key="field.id"
+          :index="index"
+          :field="field"
+          :form="form"
+          @remove="removeTableMany"
+          @refresh="refreshTableMany"
+        ></TableMany>
+        <div class="d-flex p-3">
+          <span
+            class="btn btn-label-primary btn-pill btn-sm p-2 ml-auto"
+            @click="addTableMany"
+            ><i class="fas fa-plus"></i
+          ></span>
         </div>
       </div>
     </form>
@@ -206,7 +237,8 @@ export default {
         table: {
           project_id: '',
           name: '',
-          sequence: ''
+          sequence: '',
+          use_timestamp: true
         },
         fields: [],
         deletedId: [],
@@ -221,6 +253,11 @@ export default {
       alert: ''
     }
   },
+  computed: {
+    fieldsLength() {
+      return this.form.fields.length
+    }
+  },
   watch: {
     '$route.params.id': {
       handler(value) {
@@ -233,6 +270,19 @@ export default {
       handler(value) {
         this.getSelectedProject()
         this.getTable()
+      },
+      deep: true
+    },
+    'form.table.name': {
+      handler(value, old) {
+        if (!old) {
+          this.form.table.label = this.form.table.label
+        } else if (value) {
+          this.form.table.label = value
+            .replace('_', ' ')
+            .toLowerCase()
+            .replace(/\b(\w)/g, s => s.toUpperCase())
+        }
       },
       deep: true
     },
@@ -264,7 +314,8 @@ export default {
         this.form.table = {
           project_id: '',
           name: '',
-          sequence: ''
+          sequence: '',
+          use_timestamp: true
         }
         this.form.fields = []
       }
@@ -334,6 +385,8 @@ export default {
               this.form.table.project_id = ''
               this.form.table.name = ''
               this.form.table.sequence = ''
+              this.form.table.label = ''
+              this.form.table.icon = ''
               this.form.use_many = false
             })
           }

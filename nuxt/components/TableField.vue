@@ -1,21 +1,21 @@
 <template>
-  <div class="pt-3 pb-1">
-    <div class="row px-2" role="tab">
+  <div class="card p-0 mb-2">
+    <div class="row p-3" role="tab">
       <input v-model="fields.id" type="text" class="d-none" />
       <div class="col-2">
         <input v-model="fields.name" type="text" class="form-control" />
       </div>
-      <div class="col-2 form-group mb-0">
+      <div class="col-1 form-group mb-0 px-0">
         <select v-model="fields.type" class="form-control">
           <option v-for="type in types" :key="type.index" :value="type.value">
             {{ type.text }}
           </option>
         </select>
       </div>
-      <div class="col-1">
+      <div class="col-1 pr-0">
         <input v-model="fields.length" type="text" class="form-control" />
       </div>
-      <div class="col-1">
+      <div class="col-1 px-4">
         <input
           v-if="fields.type == 'integer'"
           v-model="fields.unsigned"
@@ -23,21 +23,21 @@
           type="checkbox"
         />
       </div>
-      <div class="col-1">
+      <div class="col-1 pl-4">
         <input
           v-model="fields.allow_null"
           type="checkbox"
           class="form-control"
         />
       </div>
-      <div class="col-1">
+      <div class="col-2">
         <select v-model="fields.key" class="form-control">
           <option v-for="k in key" :key="k.index" :value="k.value">
             {{ k.text }}
           </option>
         </select>
       </div>
-      <div class="col-1">
+      <div class="col-1 px-0">
         <input v-model="fields.default" type="text" class="form-control" />
       </div>
       <div class="col-2">
@@ -60,7 +60,11 @@
 
     <div v-if="show == true && index == selectedIndex">
       <div class="pb-2 border-bottom">
-        <div class="row my-3 px-3">
+        <div class="row mb-3 px-3">
+          <div class="col-3">
+            <label class="mb-0">Label</label>
+            <input v-model="fields.label" type="text" class="form-control" />
+          </div>
           <div class="col-3">
             <label class="mb-0">Input Type</label>
             <select v-model="fields.inputType" class="form-control">
@@ -70,18 +74,6 @@
                 :value="type.value"
               >
                 {{ type.text }}
-              </option>
-            </select>
-          </div>
-          <div v-show="fields.table && fields.key == 'foreign'" class="col-3">
-            <label class="mb-0">Display Field</label>
-            <select v-model="fields.display_field" class="form-control">
-              <option
-                v-for="tabFild in tableFields"
-                :key="tabFild.index"
-                :value="tabFild.name"
-              >
-                {{ tabFild.name }}
               </option>
             </select>
           </div>
@@ -131,9 +123,21 @@
               </option>
             </select>
           </div>
+          <div v-show="fields.table && fields.key == 'foreign'" class="col-2">
+            <label class="mb-0">Display Field</label>
+            <select v-model="fields.display_field" class="form-control">
+              <option
+                v-for="tabFild in tableFields"
+                :key="tabFild.index"
+                :value="tabFild.name"
+              >
+                {{ tabFild.name }}
+              </option>
+            </select>
+          </div>
           <div
             v-if="fields.foreign_key && fields.key == 'foreign'"
-            class="col-3"
+            class="col-2"
           >
             <label class="mb-0">OnDelete</label>
             <select v-model="fields.onDelete" class="form-control">
@@ -144,7 +148,7 @@
           </div>
           <div
             v-if="fields.foreign_key && fields.key == 'foreign'"
-            class="col-3"
+            class="col-2"
           >
             <label class="font-weight-lighter small mb-0">OnUpdate</label>
             <select v-model="fields.onUpdate" class="form-control">
@@ -235,6 +239,19 @@ export default {
       },
       deep: true
     },
+    'fields.name': {
+      handler(value, old) {
+        if (!old) {
+          this.fields.label = this.field.label
+        } else {
+          this.fields.label = value
+            .replace('_', ' ')
+            .toLowerCase()
+            .replace(/\b(\w)/g, s => s.toUpperCase())
+        }
+      },
+      deep: true
+    },
     'fields.type': {
       handler(value, old) {
         if (!old) {
@@ -259,8 +276,6 @@ export default {
     },
     'fields.key': {
       handler(value, old) {
-        /* eslint-disable no-console */
-        // console.log(old)
         this.fields.extra = value === 'primary' ? 'auto_increment' : ''
         if (value !== 'foreign') {
           this.fields.display_field = ''
@@ -273,12 +288,8 @@ export default {
       deep: true
     },
     'fields.allow_null': {
-      handler(value, old) {
-        if (!old) {
-          this.fields.default = this.fields.default
-        } else {
-          this.fields.default = this.fields.allow_null ? 'NULL' : ''
-        }
+      handler(value) {
+        this.fields.default = value === true ? 'NULL' : ''
       },
       deep: true
     },

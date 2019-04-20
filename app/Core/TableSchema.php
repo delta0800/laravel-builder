@@ -22,6 +22,13 @@ class TableSchema
     protected $name;
 
     /**
+     * Table Name
+     *
+     * @var string
+     */
+    protected $label;
+
+    /**
      * List of columns
      *
      * @var \Illuminate\Support\Collection|null
@@ -68,6 +75,8 @@ class TableSchema
         $this->table = $table;
 
         $this->name = $table->name;
+
+        $this->label = $table->label;
 
         $this->setAttributes($columns);
     }

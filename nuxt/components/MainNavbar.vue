@@ -14,12 +14,15 @@
       >
         <ul class="kt-menu__nav ">
           <li
-            class="kt-menu__item  kt-menu__item--submenu kt-menu__item--rel kt-menu__item--active"
+            class="kt-menu__item kt-menu__item--submenu kt-menu__item--rel"
+            :class="classes"
             data-ktmenu-submenu-toggle="click"
             aria-haspopup="true"
           >
             <a href="javascript:;" class="kt-menu__link kt-menu__toggle"
-              ><span class="kt-menu__link-text">Project</span></a
+              ><span class="kt-menu__link-text" @click="troggleMenu">{{
+                selectedProject
+              }}</span></a
             >
             <div
               class="kt-menu__submenu kt-menu__submenu--classic kt-menu__submenu--left"
@@ -32,7 +35,7 @@
                   class="kt-menu__item "
                   aria-haspopup="true"
                 >
-                  <a href="/" class="kt-menu__link ">
+                  <a class="kt-menu__link" @click="selectProject(project)">
                     <span class="kt-menu__link-icon"> </span>
                     <span class="kt-menu__link-text">{{ project.title }}</span>
                   </a>
@@ -71,7 +74,8 @@ export default {
   },
   data() {
     return {
-      selectedProject: ''
+      selectedProject: '',
+      classes: ''
     }
   },
   mounted() {
@@ -83,6 +87,13 @@ export default {
     selectProject(project) {
       this.selectedProject = project.title
       this.$router.replace({ path: `/project/${project.slug}/table/` })
+      this.classes = ''
+    },
+    troggleMenu() {
+      this.classes =
+        this.classes !== ''
+          ? ''
+          : 'kt-menu__item--active kt-menu__item--open-dropdown kt-menu__item--hover'
     }
   }
 }

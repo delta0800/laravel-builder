@@ -9,7 +9,7 @@ class Table extends Model
     protected $table = 'tables';
 
     protected $fillable = [
-        'project_id', 'name', 'sequence', 'use_timestamp', 'soft_delete', 'auth', 'notify'
+        'project_id', 'name', 'sequence', 'use_timestamp', 'soft_delete', 'auth', 'notify', 'label', 'icon',
     ];
 
     protected $casts = [

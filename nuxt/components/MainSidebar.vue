@@ -62,7 +62,7 @@
               <span class="kt-menu__link-icon">
                 <i class="fas fa-table"></i>
               </span>
-              <span class="kt-menu__link-text">{{ table.name }}</span>
+              <span class="kt-menu__link-text">{{ table.label }}</span>
             </a>
           </li>
           <li class="kt-menu__item " aria-haspopup="true">
