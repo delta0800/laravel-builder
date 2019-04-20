@@ -17,6 +17,7 @@
       role="dialog"
       aria-labelledby="exampleModalCenterTitle"
       aria-hidden="true"
+      :style="showModal"
     >
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -62,7 +63,9 @@
               >
                 Close
               </button>
-              <button type="submit" class="btn btn-primary">Add</button>
+              <button type="submit" class="btn btn-primary">
+                Add
+              </button>
             </div>
           </form>
         </div>
@@ -75,26 +78,21 @@
 export default {
   data() {
     return {
-      showModal: false,
+      showModal: '',
       form: {
         title: ''
       }
     }
   },
   methods: {
-    handleClick() {
-      this.showModal = true
-    },
-    handleClose() {
-      this.showModal = false
-    },
     handleOnSubmit(e) {
       e.preventDefault()
       this.$validator.validateAll().then(x => {
         if (x) {
           this.$axios.$post('/projects', this.form).then(res => {
             this.$store.commit('appendProject', res)
-            this.showModal = false
+            console.log(res)
+            this.showModal = 'display: none;'
             this.form.title = ''
           })
         }

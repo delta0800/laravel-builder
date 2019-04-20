@@ -47,8 +47,9 @@ class ZipFileNotification extends Notification
         $url = url(Storage::url($this->downloadRequest->filename));
 
         return (new MailMessage)
-                    ->line('Your project zip generated successfully.')
-                    ->action('Download Zip', $url)
+                    ->subject('Project ready to download')
+                    ->line('Your project zip ready to Download.')
+                    ->action('Download', $url)
                     ->line('Thank you for using our application!');
     }
 

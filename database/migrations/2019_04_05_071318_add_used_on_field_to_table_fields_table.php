@@ -14,7 +14,7 @@ class AddUsedOnFieldToTableFieldsTable extends Migration
     public function up()
     {
         Schema::table('table_fields', function (Blueprint $table) {
-            $table->boolean('use_on_form');
+            $table->boolean('use_on_form')->after('show_on');
         });
     }
 

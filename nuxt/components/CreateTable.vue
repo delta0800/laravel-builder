@@ -110,13 +110,13 @@
       </div>
       <div class="row p-3 font-weight-bold">
         <div class="col-2">Name</div>
-        <div class="col-1">Type</div>
+        <div class="col-2">Type</div>
         <div class="col-1">Length</div>
         <div class="col-1">Unsigned</div>
         <div class="col-1">Null ?</div>
         <div class="col-2">Key</div>
+        <div class="col-1">Auto Inc.</div>
         <div class="col-1">Default</div>
-        <div class="col-2">Extra</div>
         <div class="col-1"></div>
       </div>
       <div>
@@ -195,6 +195,7 @@
                 v-model="form.use_many"
                 type="checkbox"
                 class="form-control"
+                :disabled="fieldsLength < 1"
               />
             </div>
           </div>
@@ -317,7 +318,22 @@ export default {
           sequence: '',
           use_timestamp: true
         }
-        this.form.fields = []
+        this.form.fields.push({
+          name: '',
+          type: 'string',
+          length: '255',
+          unsigned: false,
+          allow_null: false,
+          key: '',
+          default: '',
+          auto_increment: false,
+          show_on: false,
+          use_on_form: true,
+          table: '',
+          foreign_key: '',
+          onDelete: '',
+          onUpdate: ''
+        })
       }
     },
     getSelectedProject() {
@@ -334,7 +350,7 @@ export default {
         allow_null: false,
         key: '',
         default: '',
-        extra: '',
+        auto_increment: false,
         show_on: false,
         use_on_form: true,
         table: '',
@@ -344,10 +360,12 @@ export default {
       })
     },
     remove(fields) {
-      if (this.tableId) {
-        this.form.deletedId.push(fields.id)
+      if (confirm('Do you really want to delete?')) {
+        if (this.tableId) {
+          this.form.deletedId.push(fields.id)
+        }
+        this.form.fields.splice(this.form.fields.indexOf(fields), 1)
       }
-      this.form.fields.splice(this.form.fields.indexOf(fields), 1)
     },
     handleOnSubmit(e) {
       e.preventDefault()
@@ -394,12 +412,13 @@ export default {
       })
     },
     deleteTable() {
-      console.log('aaaa')
-      this.$axios.$delete(`/tables/delete/${this.tableId}`).then(res => {
-        this.$router.replace({
-          path: `/project/${this.$route.params.slug}/table/`
+      if (confirm('Do you really want to delete?')) {
+        this.$axios.$delete(`/tables/delete/${this.tableId}`).then(res => {
+          this.$router.replace({
+            path: `/project/${this.$route.params.slug}/table/`
+          })
         })
-      })
+      }
     },
     handleTimeChange(time) {
       this.timeUntilDismissed = time

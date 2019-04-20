@@ -14,7 +14,7 @@ class AddForeignKeyFieldsToTableFieldsTable extends Migration
     public function up()
     {
         Schema::table('table_fields', function (Blueprint $table) {
-            $table->string('table')->nullable()->after('extra');
+            $table->string('table')->nullable()->after('default');
             $table->string('foreign_key')->nullable()->after('table');
             $table->string('onDelete')->nullable()->after('foreign_key');
             $table->string('onUpdate')->nullable()->after('onDelete');

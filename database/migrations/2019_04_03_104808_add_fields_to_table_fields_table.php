@@ -14,9 +14,9 @@ class AddFieldsToTableFieldsTable extends Migration
     public function up()
     {
         Schema::table('table_fields', function (Blueprint $table) {
-            $table->string('inputType')->nullable();
-            $table->string('display_field')->nullable();
-            $table->boolean('show_on');
+            $table->string('inputType')->nullable()->after('default');
+            $table->string('display_field')->nullable()->after('foreign_key');
+            $table->boolean('show_on')->after('inputType');
         });
     }
 

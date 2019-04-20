@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Project;
-use Illuminate\Http\Request;
+use App\DownloadRequest;
+use App\Events\SendMail;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\ProjectRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class ProjectController extends Controller
+class DownloadRequestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        return response()->json(Project::with('tables')->get());
+        //
     }
 
     /**
@@ -32,38 +33,32 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param ProjectRequest $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjectRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->all();
-
-        $project = Project::create($data);
-
-        return response()->json($project->load('tables'));
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param $slug
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show($id)
     {
-        return response()->json(
-            Project::with('packages', 'downloadRequest')->where('slug', $slug)->first()
-        );
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Project  $project
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project)
+    public function edit($id)
     {
         //
     }
@@ -72,10 +67,10 @@ class ProjectController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Project  $project
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -83,14 +78,33 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Project $project
+     * @param  int  $id
      * @return \Illuminate\Http\Response
-     * @throws \Exception
      */
-    public function destroy(Project $project)
+    public function destroy($id)
     {
-        $project->delete();
+        //
+    }
+
+    /**
+     * @param DownloadRequest $downloadRequest
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function mail(DownloadRequest $downloadRequest)
+    {
+        event(new SendMail($downloadRequest));
 
         return response([], 200);
+    }
+
+    /**
+     * @param DownloadRequest $downloadRequest
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function download(DownloadRequest $downloadRequest)
+    {
+        $pathToFile = Storage::url($downloadRequest->filename);
+
+        return response()->json($pathToFile);
     }
 }

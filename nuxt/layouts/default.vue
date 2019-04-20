@@ -27,6 +27,7 @@ import MainSidebar from '~/components/MainSidebar.vue'
 
 export default {
   // middleware: 'auth',
+  auth: true,
   components: {
     MainSidebar,
     MainNavbar

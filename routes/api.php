@@ -38,5 +38,8 @@ Route::namespace('Api')
                 Route::delete('/tableField/delete/{tableField}', 'TableFieldController@destroy');
 
                 Route::get('/packages', 'PackageController@index');
+
+                Route::get('/sendMail/Request/{downloadRequest}', 'DownloadRequestController@mail');
+                Route::get('/download/Request/{downloadRequest}', 'DownloadRequestController@download');
  //           });
     });

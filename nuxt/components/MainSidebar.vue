@@ -55,31 +55,42 @@
             class="kt-menu__item "
             aria-haspopup="true"
           >
-            <a
-              :href="`/project/${slug}/table/${table.id}`"
-              class="kt-menu__link "
+            <nuxt-link
+              :to="`/project/${slug}/table/${table.id}`"
+              class="kt-menu__link"
             >
               <span class="kt-menu__link-icon">
                 <i class="fas fa-table"></i>
               </span>
               <span class="kt-menu__link-text">{{ table.label }}</span>
-            </a>
+            </nuxt-link>
           </li>
           <li class="kt-menu__item " aria-haspopup="true">
-            <a :href="`/project/${slug}/table/`" class="kt-menu__link ">
-              <span class="kt-menu__link-icon">
-                <i class="fas fa-tablet-alt"></i>
-              </span>
-              <span class="kt-menu__link-text">Add Table</span>
-            </a>
-          </li>
-          <li class="kt-menu__item " aria-haspopup="true">
-            <a :href="`/project/${slug}/generator`" class="kt-menu__link ">
+            <nuxt-link :to="`/project/${slug}/table/`" class="kt-menu__link ">
               <span class="kt-menu__link-icon">
                 <i class="fas fa-plus-circle"></i>
               </span>
+              <span class="kt-menu__link-text">Add Table</span>
+            </nuxt-link>
+          </li>
+          <li class="kt-menu__item " aria-haspopup="true">
+            <nuxt-link
+              :to="`/project/${slug}/generator`"
+              class="kt-menu__link "
+            >
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-cloud-download-alt"></i>
+              </span>
               <span class="kt-menu__link-text">Generate</span>
-            </a>
+            </nuxt-link>
+          </li>
+          <li class="kt-menu__item " aria-haspopup="true">
+            <nuxt-link :to="`/project/${slug}/requests`" class="kt-menu__link ">
+              <span class="kt-menu__link-icon">
+                <i class="fas fa-download"></i>
+              </span>
+              <span class="kt-menu__link-text">Download Requests</span>
+            </nuxt-link>
           </li>
         </ul>
       </div>

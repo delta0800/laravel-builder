@@ -1,38 +1,118 @@
 <template>
-  <div>
-    <d-card class="ml-auto mr-auto mt-5" style="max-width: 300px">
-      <d-card-header class="border-bottom">
-        Login into your account
-      </d-card-header>
-      <d-card-body>
-        <d-form @submit.prevent="doLogin">
-          <label for="Username">Email</label>
-          <d-input
-            id="email"
-            v-model="form.email"
-            name="email"
-            class="mb-2"
-            placeholder="Email"
-          />
-
-          <label for="Password">Password</label>
-          <d-input
-            id="Password"
-            v-model="form.password"
-            name="password"
-            class="mb-2"
-            type="password"
-            placeholder="Password"
-          />
-
-          <d-button type="submit" theme="primary">Sign In</d-button>
-          <div class="mt-4">
-            Don't have account?
-            <nuxt-link to="/auth/register">Register here</nuxt-link>
+  <div class="h-100 kt-grid kt-grid--ver kt-grid--root">
+    <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v1">
+      <div
+        class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile"
+      >
+        <div
+          class="kt-grid__item kt-grid__item--order-tablet-and-mobile-2 kt-grid kt-grid--hor kt-login__aside"
+          style="background-image: url(/media//bg/bg-4.jpg);"
+        >
+          <div class="kt-grid__item">
+            <a href="#" class="kt-login__logo">
+              <img src="/media/logos/logo-4.png" />
+            </a>
           </div>
-        </d-form>
-      </d-card-body>
-    </d-card>
+          <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver">
+            <div class="kt-grid__item kt-grid__item--middle">
+              <h3 class="kt-login__title">Welcome to Crud!</h3>
+              <h4 class="kt-login__subtitle">
+                The ultimate Bootstrap &amp; Angular 6 admin theme framework for
+                next generation web apps.
+              </h4>
+            </div>
+          </div>
+          <div class="kt-grid__item">
+            <div class="kt-login__info">
+              <div class="kt-login__copyright">
+                © 2018 generator
+              </div>
+              <div class="kt-login__menu">
+                <a href="#" class="kt-link">Privacy</a>
+                <a href="#" class="kt-link">Legal</a>
+                <a href="#" class="kt-link">Contact</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="kt-grid__item kt-grid__item--fluid  kt-grid__item--order-tablet-and-mobile-1  kt-login__wrapper"
+        >
+          <div class="kt-login__head">
+            <span class="kt-login__signup-label"
+              >Don't have an account yet?</span
+            >&nbsp;&nbsp;
+            <nuxt-link to="/auth/register" class="kt-link kt-login__signup-link"
+              >Sign Up!</nuxt-link
+            >
+          </div>
+          <div class="kt-login__body">
+            <div class="kt-login__form">
+              <div class="kt-login__title">
+                <h3>Sign In</h3>
+              </div>
+              <form class="kt-form" action="" @submit.prevent="doLogin">
+                <div class="form-group">
+                  <input
+                    id="email"
+                    v-model="form.email"
+                    name="email"
+                    class="mb-2 form-control"
+                    placeholder="Email"
+                  />
+                </div>
+                <div class="form-group">
+                  <input
+                    id="Password"
+                    v-model="form.password"
+                    name="password"
+                    class="mb-2 form-control"
+                    type="password"
+                    placeholder="Password"
+                  />
+                </div>
+                <div class="kt-login__actions">
+                  <a href="#" class="kt-link kt-login__link-forgot">
+                    Forgot Password ?
+                  </a>
+                  <button
+                    id="kt_login_signin_submit"
+                    type="submit"
+                    class="btn btn-primary btn-elevate kt-login__btn-primary"
+                  >
+                    Sign In
+                  </button>
+                </div>
+              </form>
+              <div class="kt-login__divider">
+                <div class="kt-divider">
+                  <span></span>
+                  <span>OR</span>
+                  <span></span>
+                </div>
+              </div>
+              <div class="kt-login__options">
+                <a href="#" class="btn btn-primary kt-btn">
+                  <i class="fab fa-facebook-f"></i>
+                  Facebook
+                </a>
+
+                <a href="#" class="btn btn-info kt-btn">
+                  <i class="fab fa-twitter"></i>
+                  Twitter
+                </a>
+
+                <a href="#" class="btn btn-danger kt-btn">
+                  <i class="fab fa-google"></i>
+                  Google
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -50,13 +130,20 @@ export default {
   },
   methods: {
     doLogin(e) {
-      this.$auth
-        .loginWith('local', {
-          data: this.form
-        })
-        .then(() => {
-          this.$router.replace({ path: '/projects' })
-        })
+      // this.$auth
+      //   .loginWith('local', {
+      //     data: this.form
+      //   })
+      //   .then(() => {
+      //     this.$router.replace({ path: '/projects' })
+      //   })
+      if (
+        this.form.email === 'admin@user.com' &&
+        this.form.password === 'secret'
+      ) {
+        this.$router.replace({ path: '/projects' })
+        this.auth = true
+      }
     }
   }
 }

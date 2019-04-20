@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class TableField extends Model
 {
     protected $fillable = [
-        'table_id', 'project_id', 'name', 'type', 'length', 'unsigned', 'allow_null', 'key', 'default', 'extra',
+        'table_id', 'project_id', 'name', 'type', 'length', 'unsigned', 'allow_null', 'key', 'default', 'auto_increment',
         'table', 'foreign_key', 'onDelete', 'onUpdate', 'inputType', 'display_field', 'show_on', 'use_on_form',
         'label'
     ];
@@ -16,7 +16,8 @@ class TableField extends Model
         'unsigned' => 'boolean',
         'allow_null' => 'boolean',
         'show_on' => 'boolean',
-        'use_on_form' =>'boolean',
+        'use_on_form' => 'boolean',
+        'auto_increment' => 'boolean'
     ];
 
     public function table()

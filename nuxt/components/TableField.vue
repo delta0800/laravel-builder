@@ -5,7 +5,7 @@
       <div class="col-2">
         <input v-model="fields.name" type="text" class="form-control" />
       </div>
-      <div class="col-1 form-group mb-0 px-0">
+      <div class="col-2 form-group mb-0">
         <select v-model="fields.type" class="form-control">
           <option v-for="type in types" :key="type.index" :value="type.value">
             {{ type.text }}
@@ -37,11 +37,15 @@
           </option>
         </select>
       </div>
-      <div class="col-1 px-0">
-        <input v-model="fields.default" type="text" class="form-control" />
+      <div class="col-1 pl-5">
+        <input
+          v-model="fields.auto_increment"
+          type="checkbox"
+          class="form-control"
+        />
       </div>
-      <div class="col-2">
-        <input v-model="fields.extra" type="text" class="form-control" />
+      <div class="col-1">
+        <input v-model="fields.default" type="text" class="form-control" />
       </div>
       <div class="col-1 px-0">
         <div
@@ -276,7 +280,7 @@ export default {
     },
     'fields.key': {
       handler(value, old) {
-        this.fields.extra = value === 'primary' ? 'auto_increment' : ''
+        this.fields.auto_increment = value === 'primary'
         if (value !== 'foreign') {
           this.fields.display_field = ''
           this.fields.table = ''

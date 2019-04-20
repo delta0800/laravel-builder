@@ -17,7 +17,7 @@ class CreateTablesTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('project_id');
             $table->string('name');
-            $table->integer('sequence');
+            $table->integer('sequence')->nullable();
             $table->timestamps();
 
             $table->foreign('project_id')

@@ -167,8 +167,6 @@ export default {
           if (res.packages) {
             this.selectedPackage = res.packages
           }
-          /* eslint-disable no-console */
-          // console.log(this.selectedPackage)
         })
       }
     },

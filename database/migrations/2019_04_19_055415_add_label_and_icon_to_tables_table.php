@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddAuthAndNotifyToTablesTable extends Migration
+class AddLabelAndIconToTablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,8 @@ class AddAuthAndNotifyToTablesTable extends Migration
     public function up()
     {
         Schema::table('tables', function (Blueprint $table) {
-            $table->boolean('auth')->after('soft_delete');
-            $table->boolean('notify')->after('auth');
+            $table->string('label')->nullable()->after('name');
+            $table->string('icon')->nullable()->after('label');
         });
     }
 
@@ -27,7 +27,7 @@ class AddAuthAndNotifyToTablesTable extends Migration
     public function down()
     {
         Schema::table('tables', function (Blueprint $table) {
-            $table->dropColumn(['auth', 'notify']);
+            $table->dropColumn(['label', 'icon', ]);
         });
     }
 }
