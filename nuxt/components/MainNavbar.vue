@@ -46,18 +46,37 @@
         </ul>
       </div>
     </div>
-    <div class="kt-header__topbar-item kt-header__topbar-item--user">
-      <div
-        class="kt-header__topbar-wrapper"
-        data-toggle="dropdown"
-        data-offset="0px,0px"
-      >
-        <div class="kt-header__topbar-user p-4">
-          <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
-          <span class="kt-header__topbar-username kt-hidden-mobile">Sean</span>
-          <img class="kt-hidden" alt="Pic" src="/image/default-avatar.png" />
+    <div class="kt-header__topbar">
+      <div class="kt-header__topbar-item kt-header__topbar-item--user">
+        <div
+          class="kt-header__topbar-wrapper"
+          data-toggle="dropdown"
+          data-offset="0px,0px"
+        >
+          <div class="kt-header__topbar-user py-4">
+            <span class="kt-header__topbar-welcome kt-hidden-mobile">Hi,</span>
+            <span class="kt-header__topbar-username kt-hidden-mobile"
+              >Sean</span
+            >
+            <img class="kt-hidden" alt="Pic" src="/image/default-avatar.png" />
+          </div>
         </div>
-        <!--end: Navigation -->
+      </div>
+      <div class="kt-header__topbar-item kt-header__topbar-item--user">
+        <div
+          class="kt-header__topbar-wrapper"
+          data-toggle="dropdown"
+          data-offset="0px,0px"
+        >
+          <div class="kt-header__topbar-user p-4">
+            <span
+              class="kt-header__topbar-username kt-hidden-mobile"
+              @click="doLogout"
+              >Logout</span
+            >
+          </div>
+          <!--end: Navigation -->
+        </div>
       </div>
     </div>
     <!-- end:: Header Topbar -->
@@ -94,6 +113,11 @@ export default {
         this.classes !== ''
           ? ''
           : 'kt-menu__item--active kt-menu__item--open-dropdown kt-menu__item--hover'
+    },
+    doLogout() {
+      this.$auth.logout().then(res => {
+        this.$router.replace({ path: '/auth/login' })
+      })
     }
   }
 }

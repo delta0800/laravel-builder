@@ -1,6 +1,9 @@
 <template>
-  <div class="h-100 kt-grid kt-grid--ver kt-grid--root">
-    <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v1">
+  <div class="kt-grid kt-grid--ver kt-grid--root h-100">
+    <div
+      id="kt_login"
+      class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v1"
+    >
       <div
         class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--desktop kt-grid--ver-desktop kt-grid--hor-tablet-and-mobile"
       >
@@ -15,27 +18,25 @@
           </div>
           <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver">
             <div class="kt-grid__item kt-grid__item--middle">
-              <h3 class="kt-login__title">Welcome to Crud!</h3>
+              <h3 class="kt-login__title">Welcome to Generetor!</h3>
               <h4 class="kt-login__subtitle">
-                The ultimate Bootstrap &amp; Angular 6 admin theme framework for
-                next generation web apps.
+                The ultimate Bootstrap theme framework for next generation web
+                apps.
               </h4>
             </div>
           </div>
           <div class="kt-grid__item">
             <div class="kt-login__info">
               <div class="kt-login__copyright">
-                © 2018 generator
+                2018 Metronic
               </div>
               <div class="kt-login__menu">
                 <a href="#" class="kt-link">Privacy</a>
-                <a href="#" class="kt-link">Legal</a>
                 <a href="#" class="kt-link">Contact</a>
               </div>
             </div>
           </div>
         </div>
-
         <div
           class="kt-grid__item kt-grid__item--fluid  kt-grid__item--order-tablet-and-mobile-1  kt-login__wrapper"
         >
@@ -55,21 +56,21 @@
               <form class="kt-form" action="" @submit.prevent="doLogin">
                 <div class="form-group">
                   <input
-                    id="email"
                     v-model="form.email"
-                    name="email"
-                    class="mb-2 form-control"
+                    class="form-control"
+                    type="text"
                     placeholder="Email"
+                    name="email"
+                    autocomplete="off"
                   />
                 </div>
                 <div class="form-group">
                   <input
-                    id="Password"
                     v-model="form.password"
-                    name="password"
-                    class="mb-2 form-control"
+                    class="form-control"
                     type="password"
                     placeholder="Password"
+                    name="password"
                   />
                 </div>
                 <div class="kt-login__actions">
@@ -78,7 +79,6 @@
                   </a>
                   <button
                     id="kt_login_signin_submit"
-                    type="submit"
                     class="btn btn-primary btn-elevate kt-login__btn-primary"
                   >
                     Sign In
@@ -97,12 +97,10 @@
                   <i class="fab fa-facebook-f"></i>
                   Facebook
                 </a>
-
                 <a href="#" class="btn btn-info kt-btn">
                   <i class="fab fa-twitter"></i>
                   Twitter
                 </a>
-
                 <a href="#" class="btn btn-danger kt-btn">
                   <i class="fab fa-google"></i>
                   Google
@@ -148,3 +146,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.h-100 {
+  height: 100vh !important;
+}
+</style>
