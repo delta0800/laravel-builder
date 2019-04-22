@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex">
     <div class="w-75 mx-auto">
-      <div class="card p-3 mb-2 bg-dark">
+      <div class="card p-3 mb-2 bg-grey">
         <div class="row">
           <div class="col-4">
             <h5 class="mb-0">version</h5>
@@ -79,3 +79,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.bg-grey {
+  background-color: rgb(230, 233, 235);
+}
+</style>

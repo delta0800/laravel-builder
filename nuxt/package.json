@@ -15,7 +15,9 @@
   "dependencies": {
     "@nuxtjs/auth": "^4.5.3",
     "@nuxtjs/axios": "^5.4.1",
+    "bootstrap-iconpicker": "^1.8.2",
     "cross-env": "^5.2.0",
+    "font-awesome-picker": "^2.0.0",
     "nuxt": "^2.4.0",
     "shards-ui": "^2.1.2",
     "shards-vue": "^1.0.7",

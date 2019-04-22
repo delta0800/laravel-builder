@@ -73,7 +73,11 @@
               <span class="kt-menu__link-text">Add Table</span>
             </nuxt-link>
           </li>
-          <li class="kt-menu__item " aria-haspopup="true">
+          <li
+            v-show="tables.length"
+            class="kt-menu__item "
+            aria-haspopup="true"
+          >
             <nuxt-link
               :to="`/project/${slug}/generator`"
               class="kt-menu__link "
@@ -84,7 +88,11 @@
               <span class="kt-menu__link-text">Generate</span>
             </nuxt-link>
           </li>
-          <li class="kt-menu__item " aria-haspopup="true">
+          <li
+            v-show="tables.length"
+            class="kt-menu__item "
+            aria-haspopup="true"
+          >
             <nuxt-link :to="`/project/${slug}/requests`" class="kt-menu__link ">
               <span class="kt-menu__link-icon">
                 <i class="fas fa-download"></i>

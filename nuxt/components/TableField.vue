@@ -39,6 +39,7 @@
       </div>
       <div class="col-1 pl-5">
         <input
+          v-show="fields.key === 'primary'"
           v-model="fields.auto_increment"
           type="checkbox"
           class="form-control"
@@ -206,6 +207,7 @@ export default {
       ],
       key: [
         { value: '', text: '' },
+        { value: 'unique', text: 'UNIQUE' },
         { value: 'primary', text: 'PRIMARY' },
         { value: 'foreign', text: 'FOREIGN' }
       ],

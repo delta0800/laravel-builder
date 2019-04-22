@@ -79,6 +79,7 @@
                   </a>
                   <button
                     id="kt_login_signin_submit"
+                    type="submit"
                     class="btn btn-primary btn-elevate kt-login__btn-primary"
                   >
                     Sign In
@@ -127,14 +128,7 @@ export default {
     }
   },
   methods: {
-    doLogin(e) {
-      // this.$auth
-      //   .loginWith('local', {
-      //     data: this.form
-      //   })
-      //   .then(() => {
-      //     this.$router.replace({ path: '/projects' })
-      //   })
+    doLogin() {
       if (
         this.form.email === 'admin@user.com' &&
         this.form.password === 'secret'

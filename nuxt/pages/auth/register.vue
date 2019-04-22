@@ -55,7 +55,7 @@
               <div class="kt-login__title">
                 <h3>Sign Up!</h3>
               </div>
-              <form class="kt-form" action="" @submit.prevent="doRegister">
+              <form class="kt-form" @submit.prevent="doRegister">
                 <div class="form-group">
                   <input
                     id="name"
@@ -100,9 +100,10 @@
                   </a>
                   <button
                     id="kt_login_signin_submit"
+                    type="submit"
                     class="btn btn-primary btn-elevate kt-login__btn-primary"
                   >
-                    Sign In
+                    Sign Up
                   </button>
                 </div>
               </form>

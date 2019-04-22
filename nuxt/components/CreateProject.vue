@@ -43,13 +43,13 @@
                     name="title"
                     :class="[
                       'mb-2 form-control',
-                      { 'has-error': errors.has('title') }
+                      { 'is-invalid': errors.has('title') }
                     ]"
                     placeholder="title"
                   />
                   <span
                     v-if="errors.has('title')"
-                    class="text-danger small"
+                    class="invalid-feedback"
                     v-text="errors.first('title')"
                   />
                 </div>

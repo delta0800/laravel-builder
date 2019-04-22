@@ -15,8 +15,8 @@ export default {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.0.6/css/all.css' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/icon?family=Material+Icons' },
+      { rel: 'stylesheet', href: 'https://use.fontawesome.com/releases/v5.8.1/css/all.css' },
       { rel: 'stylesheet', href: 'http://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700%7CRoboto:300,400,500,600,700' },
     ],
     script: [
@@ -82,6 +82,7 @@ export default {
       { src: '/vendors/general/dompurify/dist/purify.js' },    
       { src: '/demo/default/base/scripts.bundle.js' },
       { src: '/app/custom/login/login-v1.js' },
+      { src: '/app/custom/general/base/dropdown.js' },
       { src: '/app/custom/general/dashboard.js' }, 
       { src: '/app/bundle/app.bundle.js' },
     ]

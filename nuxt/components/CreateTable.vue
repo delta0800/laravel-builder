@@ -13,14 +13,14 @@
                 v-validate="'required'"
                 :class="[
                   'form-control',
-                  { 'has-error': errors.has('tablename') }
+                  { 'is-invalid': errors.has('tablename') }
                 ]"
                 type="text"
                 name="tablename"
               />
               <span
                 v-if="errors.has('tablename')"
-                class="text-danger small"
+                class="invalid-feedback"
                 v-text="errors.first('tablename')"
               />
             </div>
@@ -32,13 +32,13 @@
             <div class="col-8">
               <input
                 v-model="form.table.label"
-                :class="['form-control', { 'has-error': errors.has('label') }]"
+                :class="['form-control', { 'is-invalid': errors.has('label') }]"
                 type="text"
                 name="label"
               />
               <span
                 v-if="errors.has('label')"
-                class="text-danger small"
+                class="invalid-feedback"
                 v-text="errors.first('label')"
               />
             </div>
@@ -59,12 +59,34 @@
               Menu Icon:
             </label>
             <div class="col-8">
-              <input
-                v-model="form.table.icon"
-                :class="['form-control']"
-                type="text"
-                name="icon"
-              />
+              <div class="form-group">
+                <div class="input-group">
+                  <input
+                    v-model="form.table.icon"
+                    type="text"
+                    class="form-control"
+                    name="icon"
+                  />
+                  <div class="input-group-append">
+                    <button
+                      type="button"
+                      class="btn btn-secondary dropdown-toggle"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      Icon
+                    </button>
+                    <div class="dropdown-menu" x-placement="bottom-start">
+                      <div class="dropdown-item px-2">
+                        <fontAwesomePicker
+                          @selectIcon="yourFunction"
+                        ></fontAwesomePicker>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="col-5 form-group mb-0 d-flex">
@@ -74,18 +96,9 @@
             <div class="col-8">
               <input
                 v-model="form.table.sequence"
-                v-validate="'required'"
-                :class="[
-                  'form-control',
-                  { 'has-error': errors.has('sequence') }
-                ]"
+                class="form-control"
                 type="text"
                 name="sequence"
-              />
-              <span
-                v-if="errors.has('sequence')"
-                class="text-danger small"
-                v-text="errors.first('sequence')"
               />
             </div>
           </div>
@@ -226,11 +239,13 @@
 <script>
 import TableField from '~/components/TableField.vue'
 import TableMany from '~/components/TableMany.vue'
+import { fontAwesomePicker } from 'font-awesome-picker'
 
 export default {
   components: {
     TableField,
-    TableMany
+    TableMany,
+    fontAwesomePicker
   },
   data() {
     return {
@@ -251,7 +266,8 @@ export default {
       selectedProject: '',
       duration: 3,
       timeUntilDismissed: 0,
-      alert: ''
+      alert: '',
+      troggleShow: ''
     }
   },
   computed: {
@@ -302,6 +318,10 @@ export default {
     this.getSelectedProject()
   },
   methods: {
+    yourFunction(selectedIcon) {
+      this.form.table.icon = selectedIcon.className
+      console.log(this.form.table.icon)
+    },
     getTable() {
       if (this.tableId) {
         this.$axios.$get(`/tables/${this.tableId}`).then(res => {
@@ -316,6 +336,7 @@ export default {
           project_id: '',
           name: '',
           sequence: '',
+          icon: '',
           use_timestamp: true
         }
         this.form.fields.push({
