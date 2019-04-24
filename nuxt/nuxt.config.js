@@ -82,7 +82,7 @@ export default {
       { src: '/vendors/general/dompurify/dist/purify.js' },    
       { src: '/demo/default/base/scripts.bundle.js' },
       { src: '/app/custom/login/login-v1.js' },
-      { src: '/app/custom/general/base/dropdown.js' },
+      // { src: '/app/custom/general/components/base/dropdown.js' },
       { src: '/app/custom/general/dashboard.js' }, 
       { src: '/app/bundle/app.bundle.js' },
     ]

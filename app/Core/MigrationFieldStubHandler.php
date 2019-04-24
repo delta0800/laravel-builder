@@ -61,13 +61,12 @@ class MigrationFieldStubHandler
             'DUMMYFIELDLENGTH' => $length,
             'DUMMYFIELDTYPE' => $type,
             'DUMMYDEFAULTFIELD' => $this->columnSchema->default == '' ? '' : '->default('.$this->columnSchema->default.')',
-            'DUMMYNULLABLEFIELD' => $this->columnSchema->notnull == true ? '->nullable()' : ''
+            'DUMMYNULLABLEFIELD' => $this->columnSchema->notnull == true ? '->nullable()' : '',
+            'DUMMYUNIQUEFIELD' => $this->columnSchema->key == 'unique' ? '->unique()' : '',
         ];
     }
 
     /**
-     * @param string $path
-     *
      * @return string|bool
      */
     protected function getStubHtml()

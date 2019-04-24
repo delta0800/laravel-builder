@@ -22,6 +22,13 @@ class ColumnSchema
     public $label;
 
     /**
+     * Column Key
+     *
+     * @var string
+     */
+    public $key;
+
+    /**
      * Column type
      *
      * @var Type
@@ -169,6 +176,7 @@ class ColumnSchema
         $this->default = $attribute->default;
         $this->notnull = $attribute->allow_null;
         $this->unsigned = $attribute->unsigned;
+        $this->key = $attribute->key;
         $this->autoincrement = $attribute->extra ? true : false ;
         $this->inputType = $attribute->inputType;
         $this->table = $attribute->table;

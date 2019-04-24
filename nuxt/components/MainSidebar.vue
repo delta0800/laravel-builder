@@ -32,13 +32,10 @@
       <div
         id="kt_aside_menu"
         class="kt-aside-menu kt-scroll ps ps--active-y"
-        data-ktmenu-vertical="1"
-        data-ktmenu-scroll="1"
-        data-ktmenu-dropdown-timeout="500"
         style="height: 227px; overflow: hidden;"
       >
         <ul v-if="slug == null" class="kt-menu__nav ">
-          <li class="kt-menu__item " aria-haspopup="true">
+          <li class="kt-menu__item">
             <a href="/projects" class="kt-menu__link ">
               <span class="kt-menu__link-icon">
                 <i class="fas fa-tasks"></i>
@@ -60,12 +57,12 @@
               class="kt-menu__link"
             >
               <span class="kt-menu__link-icon">
-                <i class="fas fa-table"></i>
+                <i :class="`fas fa-${table.icon}`"></i>
               </span>
               <span class="kt-menu__link-text">{{ table.label }}</span>
             </nuxt-link>
           </li>
-          <li class="kt-menu__item " aria-haspopup="true">
+          <li class="kt-menu__item">
             <nuxt-link :to="`/project/${slug}/table/`" class="kt-menu__link ">
               <span class="kt-menu__link-icon">
                 <i class="fas fa-plus-circle"></i>
@@ -73,11 +70,7 @@
               <span class="kt-menu__link-text">Add Table</span>
             </nuxt-link>
           </li>
-          <li
-            v-show="tables.length"
-            class="kt-menu__item "
-            aria-haspopup="true"
-          >
+          <li v-show="tables.length" class="kt-menu__item">
             <nuxt-link
               :to="`/project/${slug}/generator`"
               class="kt-menu__link "
@@ -88,11 +81,7 @@
               <span class="kt-menu__link-text">Generate</span>
             </nuxt-link>
           </li>
-          <li
-            v-show="tables.length"
-            class="kt-menu__item "
-            aria-haspopup="true"
-          >
+          <li v-show="tables.length" class="kt-menu__item">
             <nuxt-link :to="`/project/${slug}/requests`" class="kt-menu__link ">
               <span class="kt-menu__link-icon">
                 <i class="fas fa-download"></i>

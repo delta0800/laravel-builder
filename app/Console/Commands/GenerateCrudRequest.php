@@ -111,7 +111,7 @@ class GenerateCrudRequest extends GeneratorCommand
             if ($column->type == 'boolean') {
                 $validation = '';
             } else {
-                $validation = "'required',";
+                $validation = "'required', ";
             }
             $validation .= $this->setValidation($column);
 
@@ -149,6 +149,10 @@ class GenerateCrudRequest extends GeneratorCommand
 
         if ($column->table != null) {
             return "'exists:".$column->table.",".$column->foreign_key."', ";
+        }
+
+        if($column->key == 'unique') {
+            return "'unique:posts".$column->table."', ";
         }
     }
 

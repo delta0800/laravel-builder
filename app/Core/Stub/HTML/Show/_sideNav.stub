@@ -1,6 +1,6 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('DummyModelVariable') ? 'active' : '' }}" href="/DummyModelVariable">
-                    <i class="fas fa-tachometer-alt"></i>
+                    <i class="fas fa-DummyIcon"></i>
                     <span>DummyRouteName</span>
                 </a>
             </li>

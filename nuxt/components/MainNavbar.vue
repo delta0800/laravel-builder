@@ -1,6 +1,5 @@
 <template>
   <div id="kt_header" class="kt-header kt-grid__item  kt-header--fixed ">
-    <!-- begin:: Header Menu -->
     <button
       id="kt_header_menu_mobile_close_btn"
       class="kt-header-menu-wrapper-close"
@@ -75,11 +74,9 @@
               >Logout</span
             >
           </div>
-          <!--end: Navigation -->
         </div>
       </div>
     </div>
-    <!-- end:: Header Topbar -->
   </div>
 </template>
 

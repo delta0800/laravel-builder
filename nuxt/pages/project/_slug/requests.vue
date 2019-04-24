@@ -4,10 +4,10 @@
       <div class="card p-3 mb-2 bg-grey">
         <div class="row">
           <div class="col-4">
-            <h5 class="mb-0">version</h5>
+            <h5 class="mb-0">Version</h5>
           </div>
           <div class="col-4">
-            <h5 class="mb-0">created_at</h5>
+            <h5 class="mb-0">Requseted At</h5>
           </div>
           <div class="col-4">
             <h5 class="mb-0">Action</h5>
